@@ -1,16 +1,16 @@
 [level]
 tileset = basictiles.png
-map = ..........
-      .I---I....
-      .I###I....
-      .--#--....
-      ..........
-      ..........
+map = ..;;;;;.;.
+      .I---I;@..
+      .I###I;;;.
+      .--#--.;;.
+      ...!.@;.;.
+      @;.!;.;@.;
 
 objects = ,,,,,,,,,,
           ,,,,,,,,,,
           ,,,,,,,T,,
-          ,,,,,,,,,,
+          ,,,$,,,,,,
           ,,,,,,,,,,
           ,,,,,,,,,,
 
@@ -26,9 +26,25 @@ tile = 6, 4
 name = grass1
 tile = 3, 1
 
+[;]
+name = grass2
+tile = 0, 8
+
+[@]
+name = flowers
+tile = 4, 1
+
+[!]
+name = dirt
+tile = 2, 1
+
 [#]
 name = wood_floor
 tile = 0, 1
+
+[$]
+name = door
+tile = 0, 6
 
 [I]
 name = vertical_wall
