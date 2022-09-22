@@ -12,6 +12,7 @@ class Level:
         parser.read(filename)
         self.tileset = parser.get("level", "tileset")
         self.map = parser.get("level", "map").split("\n")
+        self.objects = parser.get("level", "objects").split("\n")
         for section in parser.sections():
             if len(section) == 1:
                 desc = dict(parser.items(section))
@@ -48,6 +49,7 @@ class Level:
         tiles = self.cache[self.tileset]
         image = Surface((self.width * self.tile_width, self.height * self.tile_height))
         self._draw(tiles, image, self.map)
+        self._draw(tiles, image, self.objects)
         return image
 
     def _draw(self, tiles, image, layer):
