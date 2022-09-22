@@ -25,14 +25,18 @@ if __name__ == "__main__":
                                           MAP_TILE_HEIGHT),
     }
 
-    level = Level(MAP_CACHE, MAP_TILE_WIDTH, MAP_TILE_HEIGHT, 'resources/midgaard.map')
-
     clock = pygame.time.Clock()
-
+    level = Level(MAP_CACHE, MAP_TILE_WIDTH, MAP_TILE_HEIGHT, 'resources/midgaard.map')
     background = level.render()
     overlays = pygame.sprite.RenderUpdates()
     screen.blit(background, (0, 0))
-    overlays.draw(screen)
-    pygame.display.flip()
-    while pygame.event.wait().type != pygame.QUIT:
-        pass
+    game_over = False
+    while not game_over:
+        overlays.draw(screen)
+        pygame.display.flip()
+        clock.tick(15)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game_over = True
+            elif event.type == pygame.KEYDOWN:
+                pressed_key = event.key
