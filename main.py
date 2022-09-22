@@ -1,18 +1,7 @@
 from frontier_hero.level import Level
 import pygame
 
-
-def load_tile_table(filename, width, height):
-    image = pygame.image.load(filename).convert()
-    image_width, image_height = image.get_size()
-    tile_table = []
-    for tile_x in range(0, round(image_width / width)):
-        line = []
-        tile_table.append(line)
-        for tile_y in range(0, round(image_height / height)):
-            rect = (tile_x * width, tile_y * height, width, height)
-            line.append(image.subsurface(rect))
-    return tile_table
+from frontier_hero.tile_cache import TileCache
 
 
 if __name__ == "__main__":
@@ -20,10 +9,7 @@ if __name__ == "__main__":
 
     MAP_TILE_WIDTH = 16
     MAP_TILE_HEIGHT = 16
-    MAP_CACHE = {
-        'basictiles.png': load_tile_table('resources/basictiles.png', MAP_TILE_WIDTH,
-                                          MAP_TILE_HEIGHT),
-    }
+    MAP_CACHE = TileCache(MAP_TILE_WIDTH, MAP_TILE_HEIGHT)
 
     clock = pygame.time.Clock()
     level = Level(MAP_CACHE, MAP_TILE_WIDTH, MAP_TILE_HEIGHT, 'resources/midgaard.map')

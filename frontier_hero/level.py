@@ -1,9 +1,11 @@
 from configparser import ConfigParser
 from pygame import Surface
 
+from frontier_hero.tile_cache import TileCache
+
 
 class Level:
-    def __init__(self, cache, tile_width, tile_height, filename):
+    def __init__(self, cache: TileCache, tile_width, tile_height, filename):
         self.cache = cache
         self.tile_width = tile_width
         self.tile_height = tile_height
