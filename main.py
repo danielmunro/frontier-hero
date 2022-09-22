@@ -25,16 +25,12 @@ if __name__ == "__main__":
                                           MAP_TILE_HEIGHT),
     }
 
-    level = Level(MAP_CACHE, MAP_TILE_WIDTH, MAP_TILE_HEIGHT, 'resources/level.map')
+    level = Level(MAP_CACHE, MAP_TILE_WIDTH, MAP_TILE_HEIGHT, 'resources/midgaard.map')
 
     clock = pygame.time.Clock()
 
-    background, overlay_dict = level.render()
+    background = level.render()
     overlays = pygame.sprite.RenderUpdates()
-    for (x, y), image in overlay_dict.items():
-        overlay = pygame.sprite.Sprite(overlays)
-        overlay.image = image
-        overlay.rect = image.get_rect().move(x * 24, y * 16 - 16)
     screen.blit(background, (0, 0))
     overlays.draw(screen)
     pygame.display.flip()

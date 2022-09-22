@@ -1,0 +1,26 @@
+[level]
+tileset = basictiles.png
+map = ..........
+      .I---I....
+      .I###I....
+      .--#--....
+      ..........
+      ..........
+
+[.]
+name = grass1
+tile = 3, 1
+
+[#]
+name = wood_floor
+tile = 0, 1
+
+[I]
+name = vertical_wall
+tile = 1, 0
+block = true
+
+[-]
+name = horizontal_wall
+tile = 0, 0
+block = true

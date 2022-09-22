@@ -7,24 +7,23 @@ class Level:
         self.cache = cache
         self.tile_width = tile_width
         self.tile_height = tile_height
-        self.background = []
         self.key = {}
         parser = ConfigParser()
         parser.read(filename)
         self.tileset = parser.get("level", "tileset")
-        self.background = parser.get("level", "background").split("\n")
+        self.map = parser.get("level", "map").split("\n")
         for section in parser.sections():
             if len(section) == 1:
                 desc = dict(parser.items(section))
                 self.key[section] = desc
-        self.width = len(self.background[0])
-        self.height = len(self.background)
+        self.width = len(self.map[0])
+        self.height = len(self.map)
 
     def get_tile(self, x, y):
         """Tell what's at the specified position of the map."""
 
         try:
-            char = self.background[y][x]
+            char = self.map[y][x]
         except IndexError:
             return {}
         try:
@@ -48,12 +47,14 @@ class Level:
     def render(self):
         tiles = self.cache[self.tileset]
         image = Surface((self.width * self.tile_width, self.height * self.tile_height))
-        overlays = {}
-        for map_y, line in enumerate(self.background):
+        self._draw(tiles, image, self.map)
+        return image
+
+    def _draw(self, tiles, image, layer):
+        for map_y, line in enumerate(layer):
             for map_x, c in enumerate(line):
                 tile = self.key[c]['tile'].split(',')
                 tile = int(tile[0]), int(tile[1])
                 tile_image = tiles[tile[0]][tile[1]]
                 image.blit(tile_image,
                            (map_x * self.tile_width, map_y * self.tile_height))
-        return image, overlays
