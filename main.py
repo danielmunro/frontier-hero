@@ -27,7 +27,7 @@ if __name__ == "__main__":
         sprites.update()
         dirty = sprites.draw(screen)
         pygame.display.update(dirty)
-        clock.tick(15)
+        clock.tick(30)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True

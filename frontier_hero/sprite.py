@@ -16,6 +16,7 @@ class Sprite(pygame.sprite.Sprite):
         self.direction = DOWN
         self.image = frames[self.direction][0]
         self.rect = self.image.get_rect()
+        self.to_pos = (0, 0)
         self.pos = pos
 
     def _get_pos(self):
@@ -33,8 +34,7 @@ class Sprite(pygame.sprite.Sprite):
     def move(self, dx, dy):
         """Change the position of the sprite on screen."""
 
-        self.rect.move_ip(dx, dy)
-        self.depth = self.rect.midleft[1]
+        self.to_pos = (self.to_pos[0] + dx, self.to_pos[1] + dy)
 
     def stand_animation(self):
         while True:
@@ -44,4 +44,21 @@ class Sprite(pygame.sprite.Sprite):
                 yield None
 
     def update(self, *args):
-        next(self.animation)
+        dx = 0
+        dy = 0
+        if self.to_pos[0] > 0:
+            dx = 2
+            self.to_pos = (self.to_pos[0] - 2, self.to_pos[1])
+        elif self.to_pos[0] < 0:
+            dx = -2
+            self.to_pos = (self.to_pos[0] + 2, self.to_pos[1])
+        elif self.to_pos[1] > 0:
+            dy = 2
+            self.to_pos = (self.to_pos[0], self.to_pos[1] - 2)
+        elif self.to_pos[1] < 0:
+            dy = -2
+            self.to_pos = (self.to_pos[0], self.to_pos[1] + 2)
+        if dx != 0 or dy != 0:
+            self.rect.move_ip(dx, dy)
+            self.depth = self.rect.midleft[1]
+            next(self.animation)
