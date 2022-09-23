@@ -11,7 +11,7 @@ if __name__ == "__main__":
     MAP_TILE_WIDTH = 16
     MAP_TILE_HEIGHT = 16
     MAP_CACHE = TileCache(MAP_TILE_WIDTH, MAP_TILE_HEIGHT)
-    SPRITE_CACHE = TileCache(32, 48)
+    SPRITE_CACHE = TileCache(16, 24)
 
     clock = pygame.time.Clock()
     level = Level(MAP_CACHE, MAP_TILE_WIDTH, MAP_TILE_HEIGHT, 'resources/midgaard.map')
@@ -33,10 +33,10 @@ if __name__ == "__main__":
                 game_over = True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    sprite.move(-32, 0)
+                    sprite.move(-16, 0)
                 elif event.key == pygame.K_RIGHT:
-                    sprite.move(32, 0)
+                    sprite.move(16, 0)
                 elif event.key == pygame.K_UP:
-                    sprite.move(0, -48)
+                    sprite.move(0, -16)
                 elif event.key == pygame.K_DOWN:
-                    sprite.move(0, 48)
+                    sprite.move(0, 16)
