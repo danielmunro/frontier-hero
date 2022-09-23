@@ -24,7 +24,7 @@ if __name__ == "__main__":
     screen.blit(background, (0, 0))
     pygame.display.update()
     sprites = pygame.sprite.RenderUpdates()
-    sprite = Sprite((2, 1), SPRITE_CACHE['fireas.png'])
+    sprite = Sprite((4, 5), SPRITE_CACHE['fireas.png'])
     sprites.add(sprite)
     game_over = False
     while not game_over:

@@ -46,6 +46,8 @@ tile = 0, 1
 [$]
 name = door
 tile = 0, 6
+warp = midgaard.map
+to = 3, 4
 
 [I]
 name = vertical_wall

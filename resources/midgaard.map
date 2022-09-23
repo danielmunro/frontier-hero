@@ -47,7 +47,7 @@ tile = 0, 1
 name = door
 tile = 0, 6
 warp = house.map
-to = 5, 4
+to = 5, 3
 
 [I]
 name = vertical_wall
