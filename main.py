@@ -9,7 +9,7 @@ TILE_SIZE = 16
 
 
 def can_move(pos):
-    return not sprite.is_moving() and not level.is_blocking(pos[0], pos[1])
+    return not sprite.is_moving() and not level.is_blocking(int(pos[0]), int(pos[1]))
 
 
 if __name__ == "__main__":
@@ -44,15 +44,15 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 game_over = True
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and can_move((int(sprite.pos[0]) - 1, int(sprite.pos[1]))):
+        if keys[pygame.K_LEFT] and can_move((sprite.pos[0] - 1, sprite.pos[1])):
             sprite.move(-TILE_SIZE, 0)
             sprite.direction = LEFT
-        if keys[pygame.K_RIGHT] and can_move((int(sprite.pos[0]) + 1, int(sprite.pos[1]))):
+        if keys[pygame.K_RIGHT] and can_move((sprite.pos[0] + 1, sprite.pos[1])):
             sprite.move(TILE_SIZE, 0)
             sprite.direction = RIGHT
-        if keys[pygame.K_UP] and can_move((int(sprite.pos[0]), int(sprite.pos[1]) - 1)):
+        if keys[pygame.K_UP] and can_move((sprite.pos[0], sprite.pos[1] - 1)):
             sprite.move(0, -TILE_SIZE)
             sprite.direction = UP
-        if keys[pygame.K_DOWN] and can_move((int(sprite.pos[0]), int(sprite.pos[1]) + 1)):
+        if keys[pygame.K_DOWN] and can_move((sprite.pos[0], sprite.pos[1] + 1)):
             sprite.move(0, TILE_SIZE)
             sprite.direction = DOWN
