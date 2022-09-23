@@ -16,12 +16,12 @@ class Sprite(pygame.sprite.Sprite):
     def _get_pos(self):
         """Check the current position of the sprite on the map."""
 
-        return self.rect.midbottom
+        return self.rect.bottomleft
 
     def _set_pos(self, pos):
         """Set the position and depth of the sprite on the map."""
         self.rect.bottomleft = pos[0] - 2, pos[1]
-        self.depth = self.rect.midbottom[1]
+        self.depth = self.rect.bottomleft[1]
 
     pos = property(_get_pos, _set_pos)
 
@@ -29,7 +29,7 @@ class Sprite(pygame.sprite.Sprite):
         """Change the position of the sprite on screen."""
 
         self.rect.move_ip(dx, dy)
-        self.depth = self.rect.midbottom[1]
+        self.depth = self.rect.bottomleft[1]
 
     def stand_animation(self):
         while True:
