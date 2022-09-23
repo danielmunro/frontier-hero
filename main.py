@@ -6,7 +6,7 @@ from frontier_hero.tile_cache import TileCache
 
 
 TILE_SIZE = 16
-TICKS = 30
+TICKS = 35
 RESOURCES_DIR = 'resources/'
 
 
@@ -46,15 +46,22 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 game_over = True
         keys = pygame.key.get_pressed()
+        last_dir = player_sprite.direction
         if keys[pygame.K_LEFT] and can_move((player_sprite.pos[0] - 1, player_sprite.pos[1])):
             player_sprite.move(-TILE_SIZE, 0)
+            last_dir = player_sprite.direction
             player_sprite.direction = LEFT
         if keys[pygame.K_RIGHT] and can_move((player_sprite.pos[0] + 1, player_sprite.pos[1])):
             player_sprite.move(TILE_SIZE, 0)
+            last_dir = player_sprite.direction
             player_sprite.direction = RIGHT
         if keys[pygame.K_UP] and can_move((player_sprite.pos[0], player_sprite.pos[1] - 1)):
             player_sprite.move(0, -TILE_SIZE)
+            last_dir = player_sprite.direction
             player_sprite.direction = UP
         if keys[pygame.K_DOWN] and can_move((player_sprite.pos[0], player_sprite.pos[1] + 1)):
             player_sprite.move(0, TILE_SIZE)
+            last_dir = player_sprite.direction
             player_sprite.direction = DOWN
+        if last_dir != player_sprite.direction:
+            next(player_sprite.animation)

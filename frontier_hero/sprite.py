@@ -6,6 +6,7 @@ DOWN = 0
 LEFT = 1
 RIGHT = 2
 UP = 3
+TICKS_PER_ANIM = 4
 
 
 class Sprite(pygame.sprite.Sprite):
@@ -18,6 +19,7 @@ class Sprite(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.to_pos = (0, 0)
         self.pos = pos
+        self.ticks = 0
 
     def _get_pos(self):
         """Check the current position of the sprite on the map."""
@@ -64,4 +66,7 @@ class Sprite(pygame.sprite.Sprite):
         if dx != 0 or dy != 0:
             self.rect.move_ip(dx, dy)
             self.depth = self.rect.midleft[1]
-            next(self.animation)
+            self.ticks = self.ticks + 1
+            if self.ticks > TICKS_PER_ANIM:
+                self.ticks = 0
+                next(self.animation)
