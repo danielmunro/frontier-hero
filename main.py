@@ -5,16 +5,21 @@ from frontier_hero.sprite import Sprite, LEFT, RIGHT, UP, DOWN
 from frontier_hero.tile_cache import TileCache
 
 
+TILE_SIZE = 16
+
+
+def can_move(pos):
+    return not sprite.is_moving() and not level.is_blocking(pos[0], pos[1])
+
+
 if __name__ == "__main__":
     screen = pygame.display.set_mode((424, 320))
 
-    MAP_TILE_WIDTH = 16
-    MAP_TILE_HEIGHT = 16
-    MAP_CACHE = TileCache(MAP_TILE_WIDTH, MAP_TILE_HEIGHT)
-    SPRITE_CACHE = TileCache(16, 24)
+    MAP_CACHE = TileCache(TILE_SIZE, TILE_SIZE)
+    SPRITE_CACHE = TileCache(TILE_SIZE, 24)
 
     clock = pygame.time.Clock()
-    level = Level(MAP_CACHE, MAP_TILE_WIDTH, MAP_TILE_HEIGHT, 'resources/midgaard.map')
+    level = Level(MAP_CACHE, TILE_SIZE, TILE_SIZE, 'resources/midgaard.map')
     background = level.render()
     screen.blit(background, (0, 0))
     pygame.display.update()
@@ -26,7 +31,7 @@ if __name__ == "__main__":
         warp = level.get_warp(int(sprite.pos[0]), int(sprite.pos[1]))
         if warp:
             sprite.pos = level.get_to(int(sprite.pos[0]), int(sprite.pos[1]))
-            level = Level(MAP_CACHE, MAP_TILE_WIDTH, MAP_TILE_HEIGHT, 'resources/' + warp)
+            level = Level(MAP_CACHE, TILE_SIZE, TILE_SIZE, 'resources/' + warp)
             background = level.render()
             screen.blit(background, (0, 0))
             pygame.display.update()
@@ -39,15 +44,15 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 game_over = True
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and not sprite.is_moving() and not level.is_blocking(int(sprite.pos[0] - 1), int(sprite.pos[1])):
-            sprite.move(-16, 0)
+        if keys[pygame.K_LEFT] and can_move((int(sprite.pos[0]) - 1, int(sprite.pos[1]))):
+            sprite.move(-TILE_SIZE, 0)
             sprite.direction = LEFT
-        if keys[pygame.K_RIGHT] and not sprite.is_moving() and not level.is_blocking(int(sprite.pos[0] + 1), int(sprite.pos[1])):
-            sprite.move(16, 0)
+        if keys[pygame.K_RIGHT] and can_move((int(sprite.pos[0]) + 1, int(sprite.pos[1]))):
+            sprite.move(TILE_SIZE, 0)
             sprite.direction = RIGHT
-        if keys[pygame.K_UP] and not sprite.is_moving() and not level.is_blocking(int(sprite.pos[0]), int(sprite.pos[1] - 1)):
-            sprite.move(0, -16)
+        if keys[pygame.K_UP] and can_move((int(sprite.pos[0]), int(sprite.pos[1]) - 1)):
+            sprite.move(0, -TILE_SIZE)
             sprite.direction = UP
-        if keys[pygame.K_DOWN] and not sprite.is_moving() and not level.is_blocking(int(sprite.pos[0]), int(sprite.pos[1] + 1)):
-            sprite.move(0, 16)
+        if keys[pygame.K_DOWN] and can_move((int(sprite.pos[0]), int(sprite.pos[1]) + 1)):
+            sprite.move(0, TILE_SIZE)
             sprite.direction = DOWN
