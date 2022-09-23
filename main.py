@@ -7,6 +7,7 @@ from frontier_hero.tile_cache import TileCache
 
 TILE_SIZE = 16
 TICKS = 30
+RESOURCES_DIR = 'resources/'
 
 
 def can_move(pos):
@@ -20,7 +21,7 @@ if __name__ == "__main__":
     player_sprite_cache = TileCache(TILE_SIZE, 24)
 
     clock = pygame.time.Clock()
-    level = Level(map_cache, TILE_SIZE, TILE_SIZE, 'resources/midgaard.map')
+    level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + 'midgaard.map')
     background = level.render()
     screen.blit(background, (0, 0))
     pygame.display.update()
@@ -32,7 +33,7 @@ if __name__ == "__main__":
         warp = level.get_warp(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
         if warp:
             player_sprite.pos = level.get_to(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
-            level = Level(map_cache, TILE_SIZE, TILE_SIZE, 'resources/' + warp)
+            level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + warp)
             background = level.render()
             screen.blit(background, (0, 0))
             pygame.display.update()
