@@ -52,6 +52,13 @@ class Level:
         value = self.get_tile(x, y).get(name)
         return value in (True, 1, 'true', 'yes', 'True', 'Yes', '1', 'on', 'On')
 
+    def get_warp(self, x, y):
+        return self.get_object(x, y).get('warp')
+
+    def get_to(self, x, y):
+        to = self.get_object(x, y).get('to').split(',')
+        return int(to[0]), int(to[1])
+
     def is_object_blocking(self, x, y):
         return self.get_object(x, y).get('block')
 

@@ -23,6 +23,13 @@ if __name__ == "__main__":
     sprites.add(sprite)
     game_over = False
     while not game_over:
+        warp = level.get_warp(int(sprite.pos[0]), int(sprite.pos[1]))
+        if warp:
+            sprite.pos = level.get_to(int(sprite.pos[0]), int(sprite.pos[1]))
+            level = Level(MAP_CACHE, MAP_TILE_WIDTH, MAP_TILE_HEIGHT, 'resources/' + warp)
+            background = level.render()
+            screen.blit(background, (0, 0))
+            pygame.display.update()
         sprites.clear(screen, background)
         sprites.update()
         dirty = sprites.draw(screen)
