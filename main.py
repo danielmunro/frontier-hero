@@ -31,16 +31,16 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT and not level.is_blocking(int(sprite.pos[0] - 1), int(sprite.pos[1])):
-                    sprite.move(-16, 0)
-                    sprite.direction = LEFT
-                elif event.key == pygame.K_RIGHT and not level.is_blocking(int(sprite.pos[0] + 1), int(sprite.pos[1])):
-                    sprite.move(16, 0)
-                    sprite.direction = RIGHT
-                elif event.key == pygame.K_UP and not level.is_blocking(int(sprite.pos[0]), int(sprite.pos[1] - 1)):
-                    sprite.move(0, -16)
-                    sprite.direction = UP
-                elif event.key == pygame.K_DOWN and not level.is_blocking(int(sprite.pos[0]), int(sprite.pos[1] + 1)):
-                    sprite.move(0, 16)
-                    sprite.direction = DOWN
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT] and not sprite.is_moving() and not level.is_blocking(int(sprite.pos[0] - 1), int(sprite.pos[1])):
+            sprite.move(-16, 0)
+            sprite.direction = LEFT
+        if keys[pygame.K_RIGHT] and not sprite.is_moving() and not level.is_blocking(int(sprite.pos[0] + 1), int(sprite.pos[1])):
+            sprite.move(16, 0)
+            sprite.direction = RIGHT
+        if keys[pygame.K_UP] and not sprite.is_moving() and not level.is_blocking(int(sprite.pos[0]), int(sprite.pos[1] - 1)):
+            sprite.move(0, -16)
+            sprite.direction = UP
+        if keys[pygame.K_DOWN] and not sprite.is_moving() and not level.is_blocking(int(sprite.pos[0]), int(sprite.pos[1] + 1)):
+            sprite.move(0, 16)
+            sprite.direction = DOWN

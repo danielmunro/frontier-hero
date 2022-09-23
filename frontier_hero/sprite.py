@@ -31,6 +31,9 @@ class Sprite(pygame.sprite.Sprite):
 
     pos = property(_get_pos, _set_pos)
 
+    def is_moving(self):
+        return self.to_pos[0] != 0 or self.to_pos[1] != 0
+
     def move(self, dx, dy):
         """Change the position of the sprite on screen."""
 
