@@ -19,7 +19,8 @@ if __name__ == "__main__":
     screen.blit(background, (0, 0))
     pygame.display.update()
     sprites = pygame.sprite.RenderUpdates()
-    sprites.add(Sprite((2, 1), SPRITE_CACHE['fireas.png']))
+    sprite = Sprite((2, 1), SPRITE_CACHE['fireas.png'])
+    sprites.add(sprite)
     game_over = False
     while not game_over:
         sprites.clear(screen, background)
@@ -31,4 +32,11 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 game_over = True
             elif event.type == pygame.KEYDOWN:
-                pressed_key = event.key
+                if event.key == pygame.K_LEFT:
+                    sprite.move(-32, 0)
+                elif event.key == pygame.K_RIGHT:
+                    sprite.move(32, 0)
+                elif event.key == pygame.K_UP:
+                    sprite.move(0, -48)
+                elif event.key == pygame.K_DOWN:
+                    sprite.move(0, 48)
