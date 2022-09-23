@@ -1,7 +1,7 @@
 from frontier_hero.level import Level
 import pygame
 
-from frontier_hero.sprite import Sprite
+from frontier_hero.sprite import Sprite, LEFT, RIGHT, UP, DOWN
 from frontier_hero.tile_cache import TileCache
 
 
@@ -34,9 +34,13 @@ if __name__ == "__main__":
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     sprite.move(-16, 0)
+                    sprite.direction = LEFT
                 elif event.key == pygame.K_RIGHT:
                     sprite.move(16, 0)
+                    sprite.direction = RIGHT
                 elif event.key == pygame.K_UP:
                     sprite.move(0, -16)
+                    sprite.direction = UP
                 elif event.key == pygame.K_DOWN:
                     sprite.move(0, 16)
+                    sprite.direction = DOWN

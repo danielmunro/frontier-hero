@@ -2,6 +2,10 @@ import pygame
 
 SPRITE_WIDTH = 32
 SPRITE_HEIGHT = 48
+DOWN = 0
+LEFT = 1
+RIGHT = 2
+UP = 3
 
 
 class Sprite(pygame.sprite.Sprite):
@@ -9,7 +13,8 @@ class Sprite(pygame.sprite.Sprite):
         super(Sprite, self).__init__()
         self.frames = frames
         self.animation = self.stand_animation()
-        self.image = frames[0][0]
+        self.direction = DOWN
+        self.image = frames[self.direction][0]
         self.rect = self.image.get_rect()
         self.pos = pos
 
@@ -34,7 +39,7 @@ class Sprite(pygame.sprite.Sprite):
     def stand_animation(self):
         while True:
             for frame in self.frames:
-                self.image = frame[0]
+                self.image = frame[self.direction]
                 yield None
                 yield None
 
