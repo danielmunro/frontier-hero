@@ -28,6 +28,7 @@ class TileCache:
         """Load an image and split it into tiles."""
 
         image = pygame.image.load("resources/" + filename).convert()
+        image.set_colorkey((0, 0, 0))
         image_width, image_height = image.get_size()
         tile_table = []
         for tile_x in range(0, math.floor(image_width / width)):
