@@ -11,7 +11,7 @@ if __name__ == "__main__":
     MAP_TILE_WIDTH = 16
     MAP_TILE_HEIGHT = 16
     MAP_CACHE = TileCache(MAP_TILE_WIDTH, MAP_TILE_HEIGHT)
-    SPRITE_CACHE = TileCache(16, 16)
+    SPRITE_CACHE = TileCache(32, 48)
 
     clock = pygame.time.Clock()
     level = Level(MAP_CACHE, MAP_TILE_WIDTH, MAP_TILE_HEIGHT, 'resources/midgaard.map')
@@ -19,7 +19,7 @@ if __name__ == "__main__":
     screen.blit(background, (0, 0))
     pygame.display.update()
     sprites = pygame.sprite.RenderUpdates()
-    sprites.add(Sprite((0, 0), SPRITE_CACHE['basictiles.png']))
+    sprites.add(Sprite((2, 1), SPRITE_CACHE['fireas.png']))
     game_over = False
     while not game_over:
         sprites.clear(screen, background)
