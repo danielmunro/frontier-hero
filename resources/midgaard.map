@@ -21,6 +21,7 @@ tile = 0, 12
 [T]
 name = tree
 tile = 6, 4
+block = true
 
 [.]
 name = grass1

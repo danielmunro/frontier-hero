@@ -34,18 +34,33 @@ class Level:
         except KeyError:
             return {}
 
+    def get_object(self, x, y):
+        """Tell what's at the specified position of the map."""
+
+        try:
+            char = self.objects[y][x]
+        except IndexError:
+            return {}
+        try:
+            return self.key[char]
+        except KeyError:
+            return {}
+
     def get_bool(self, x, y, name):
         """Tell if the specified flag is set for position on the map."""
 
         value = self.get_tile(x, y).get(name)
         return value in (True, 1, 'true', 'yes', 'True', 'Yes', '1', 'on', 'On')
 
+    def is_object_blocking(self, x, y):
+        return self.get_object(x, y).get('block')
+
     def is_blocking(self, x, y):
         """Is this place blocking movement?"""
 
         if not 0 <= x < self.width or not 0 <= y < self.height:
             return True
-        return self.get_bool(x, y, 'block')
+        return self.get_bool(x, y, 'block') or self.is_object_blocking(x, y)
 
     def render(self):
         tiles = self.cache[self.tileset]
