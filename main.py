@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     clock = pygame.time.Clock()
     level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + 'midgaard/town.map')
-    background = level.render()
+    background, foreground = level.render()
     player_sprite = Sprite((25, 10), player_sprite_cache['fireas.png'])
     offset_x = (SCREEN_WIDTH / 2) - (player_sprite.pos[0] * TILE_SIZE)
     offset_y = (SCREEN_HEIGHT / 2) + 8 - (player_sprite.pos[1] * TILE_SIZE)
@@ -58,6 +58,7 @@ if __name__ == "__main__":
         screen.fill((0, 0, 0))
         screen.blit(background, (offset_x, offset_y))
         screen.blit(player_sprite.image, (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+        screen.blit(foreground, (offset_x, offset_y))
         pygame.display.update()
         clock.tick(TICKS)
 
@@ -71,7 +72,7 @@ if __name__ == "__main__":
         if not player_sprite.is_moving() and warp:
             player_sprite.pos = level.get_to(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
             level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + warp)
-            background = level.render()
+            background, foreground = level.render()
             offset_x = (SCREEN_WIDTH / 2) - (player_sprite.pos[0] * TILE_SIZE)
             offset_y = (SCREEN_HEIGHT / 2) + 8 - (player_sprite.pos[1] * TILE_SIZE)
 

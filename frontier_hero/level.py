@@ -72,20 +72,20 @@ class Level:
 
     def render(self):
         tiles = self.cache[self.tileset]
-        image = Surface((self.width * self.tile_width, self.height * self.tile_height))
-        self._draw(tiles, image, self.map)
-        self._draw(tiles, image, self.objects)
-        return image
+        background = Surface((self.width * self.tile_width, self.height * self.tile_height)).convert_alpha()
+        foreground = Surface((self.width * self.tile_width, self.height * self.tile_height)).convert_alpha()
+        self._draw(tiles, background, foreground, self.map)
+        self._draw(tiles, background, foreground, self.objects)
+        return background, foreground
 
-    def _draw(self, tiles, image, layer):
+    def _draw(self, tiles, background, foreground, layer):
         for map_y, line in enumerate(layer):
             for map_x, c in enumerate(line):
                 if 'tile' in self.key[c]:
                     tile = self.key[c]['tile'].split(',')
                     tile = int(tile[0]), int(tile[1])
                     tile_image = tiles[tile[0]][tile[1]]
-                    image.blit(tile_image,
-                               (map_x * self.tile_width, map_y * self.tile_height))
+                    self._add_to_layer(tile_image, foreground, background, map_x, map_y)
                 elif 'tile_from' in self.key[c] and 'tile_to' in self.key[c]:
                     name = self.key[c]['name']
                     if name in self.big_sprites:
@@ -102,6 +102,11 @@ class Level:
                             for x in range(width):
                                 sprite.blit(tiles[tile_from[0] + x][tile_from[1] + y], (x * self.tile_width, y * self.tile_height))
                         self.big_sprites[name] = sprite
-                    image.blit(sprite, (map_x * self.tile_width, map_y * self.tile_height))
+                    self._add_to_layer(sprite, foreground, background, map_x, map_y)
 
-
+    def _add_to_layer(self, image, foreground, background, x, y):
+        in_foreground = self.get_object(x, y).get('foreground')
+        if in_foreground:
+            foreground.blit(image, (x * self.tile_width, y * self.tile_height))
+        else:
+            background.blit(image, (x * self.tile_width, y * self.tile_height))
