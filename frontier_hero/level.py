@@ -102,7 +102,7 @@ class Level:
                             for x in range(width):
                                 image.blit(tiles[tile_from[0] + x][tile_from[1] + y], (x * self.tile_width, y * self.tile_height))
                         self.big_sprites[name] = image
-                
+
                 if image:
                     self._add_to_layer(image, foreground, background, map_x, map_y)
 
