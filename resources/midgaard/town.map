@@ -40,7 +40,7 @@ objects = ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
 [y]
 name = door
-warp = house.map
+warp = midgaard/house1.map
 to = 5, 3
 
 [x]

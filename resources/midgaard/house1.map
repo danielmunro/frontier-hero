@@ -46,7 +46,7 @@ tile = 0, 1
 [$]
 name = door
 tile = 0, 6
-warp = midgaard.map
+warp = midgaard/town.map
 to = 19, 8
 
 [I]

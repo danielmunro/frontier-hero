@@ -29,7 +29,7 @@ if __name__ == "__main__":
     player_sprite_cache = TileCache(TILE_SIZE, 24)
 
     clock = pygame.time.Clock()
-    level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + 'midgaard.map')
+    level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + 'midgaard/town.map')
     background = level.render()
     player_sprite = Sprite((3, 5), player_sprite_cache['fireas.png'])
     offset_x = (SCREEN_WIDTH / 2) - (player_sprite.pos[0] * TILE_SIZE)
