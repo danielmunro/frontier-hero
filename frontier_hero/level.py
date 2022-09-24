@@ -21,6 +21,7 @@ class Level:
                 self.key[section] = desc
         self.width = len(self.map[0])
         self.height = len(self.map)
+        self.big_sprites = {}
 
     def get_tile(self, x, y):
         """Tell what's at the specified position of the map."""
@@ -86,16 +87,21 @@ class Level:
                     image.blit(tile_image,
                                (map_x * self.tile_width, map_y * self.tile_height))
                 elif 'tile_from' in self.key[c] and 'tile_to' in self.key[c]:
-                    tile_from = self.key[c]['tile_from'].split(',')
-                    tile_from = int(tile_from[0]), int(tile_from[1])
-                    tile_to = self.key[c]['tile_to'].split(',')
-                    tile_to = int(tile_to[0]), int(tile_to[1])
-                    width = 1 + tile_to[0] - tile_from[0]
-                    height = 1 + tile_to[1] - tile_from[1]
-                    i = Surface((width * self.tile_width, height * self.tile_height)).convert_alpha()
-                    for y in range(height):
-                        for x in range(width):
-                            i.blit(tiles[tile_from[0] + x][tile_to[1] + y], (x * self.tile_width, y * self.tile_height))
-                    image.blit(i, (map_x * self.tile_width, map_y * self.tile_height))
+                    name = self.key[c]['name']
+                    if name in self.big_sprites:
+                        sprite = self.big_sprites[name]
+                    else:
+                        tile_from = self.key[c]['tile_from'].split(',')
+                        tile_from = int(tile_from[0]), int(tile_from[1])
+                        tile_to = self.key[c]['tile_to'].split(',')
+                        tile_to = int(tile_to[0]), int(tile_to[1])
+                        width = 1 + tile_to[0] - tile_from[0]
+                        height = 1 + tile_to[1] - tile_from[1]
+                        sprite = Surface((width * self.tile_width, height * self.tile_height)).convert_alpha()
+                        for y in range(height):
+                            for x in range(width):
+                                sprite.blit(tiles[tile_from[0] + x][tile_to[1] + y], (x * self.tile_width, y * self.tile_height))
+                        self.big_sprites[name] = sprite
+                    image.blit(sprite, (map_x * self.tile_width, map_y * self.tile_height))
 
 
