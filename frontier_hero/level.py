@@ -79,8 +79,11 @@ class Level:
     def _draw(self, tiles, image, layer):
         for map_y, line in enumerate(layer):
             for map_x, c in enumerate(line):
-                tile = self.key[c]['tile'].split(',')
-                tile = int(tile[0]), int(tile[1])
-                tile_image = tiles[tile[0]][tile[1]]
-                image.blit(tile_image,
-                           (map_x * self.tile_width, map_y * self.tile_height))
+                try:
+                    tile = self.key[c]['tile'].split(',')
+                    tile = int(tile[0]), int(tile[1])
+                    tile_image = tiles[tile[0]][tile[1]]
+                    image.blit(tile_image,
+                               (map_x * self.tile_width, map_y * self.tile_height))
+                except KeyError:
+                    pass
