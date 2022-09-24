@@ -81,15 +81,15 @@ class Level:
     def _draw(self, tiles, background, foreground, layer):
         for map_y, line in enumerate(layer):
             for map_x, c in enumerate(line):
+                image = None
                 if 'tile' in self.key[c]:
                     tile = self.key[c]['tile'].split(',')
                     tile = int(tile[0]), int(tile[1])
-                    tile_image = tiles[tile[0]][tile[1]]
-                    self._add_to_layer(tile_image, foreground, background, map_x, map_y)
+                    image = tiles[tile[0]][tile[1]]
                 elif 'tile_from' in self.key[c] and 'tile_to' in self.key[c]:
                     name = self.key[c]['name']
                     if name in self.big_sprites:
-                        sprite = self.big_sprites[name]
+                        image = self.big_sprites[name]
                     else:
                         tile_from = self.key[c]['tile_from'].split(',')
                         tile_from = int(tile_from[0]), int(tile_from[1])
@@ -97,12 +97,14 @@ class Level:
                         tile_to = int(tile_to[0]), int(tile_to[1])
                         width = 1 + tile_to[0] - tile_from[0]
                         height = 1 + tile_to[1] - tile_from[1]
-                        sprite = Surface((width * self.tile_width, height * self.tile_height)).convert_alpha()
+                        image = Surface((width * self.tile_width, height * self.tile_height)).convert_alpha()
                         for y in range(height):
                             for x in range(width):
-                                sprite.blit(tiles[tile_from[0] + x][tile_from[1] + y], (x * self.tile_width, y * self.tile_height))
-                        self.big_sprites[name] = sprite
-                    self._add_to_layer(sprite, foreground, background, map_x, map_y)
+                                image.blit(tiles[tile_from[0] + x][tile_from[1] + y], (x * self.tile_width, y * self.tile_height))
+                        self.big_sprites[name] = image
+                
+                if image:
+                    self._add_to_layer(image, foreground, background, map_x, map_y)
 
     def _add_to_layer(self, image, foreground, background, x, y):
         in_foreground = self.get_object(x, y).get('foreground')
