@@ -1,5 +1,4 @@
 from frontier_hero.level import Level
-from fractions import Fraction
 import pygame
 
 from frontier_hero.sprite import Sprite, LEFT, RIGHT, UP, DOWN
@@ -26,17 +25,12 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + 'midgaard.map')
     background = level.render()
-    player_sprite = Sprite((4, 5), player_sprite_cache['fireas.png'])
-    offset_x = 192
-    offset_y = 56
+    player_sprite = Sprite((3, 5), player_sprite_cache['fireas.png'])
+    offset_x = (SCREEN_WIDTH / 2) - (player_sprite.pos[0] * TILE_SIZE)
+    offset_y = (SCREEN_HEIGHT / 2) + 8 - (player_sprite.pos[1] * TILE_SIZE)
     screen.blit(background, (offset_x, offset_y))
     game_over = False
     while not game_over:
-        warp = level.get_warp(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
-        if warp:
-            player_sprite.pos = level.get_to(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
-            level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + warp)
-            background = level.render()
         screen.fill((0, 0, 0))
         if player_sprite.to_amount != (0, 0):
             player_sprite.update()
@@ -62,6 +56,13 @@ if __name__ == "__main__":
                 game_over = True
         keys = pygame.key.get_pressed()
         direction = player_sprite.direction
+        warp = level.get_warp(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
+        if not player_sprite.is_moving() and warp:
+            player_sprite.pos = level.get_to(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
+            level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + warp)
+            background = level.render()
+            offset_x = (SCREEN_WIDTH / 2) - (player_sprite.pos[0] * TILE_SIZE)
+            offset_y = (SCREEN_HEIGHT / 2) + 8 - (player_sprite.pos[1] * TILE_SIZE)
         if keys[pygame.K_LEFT] and can_move((player_sprite.pos[0] - 1, player_sprite.pos[1])):
             player_sprite.to_amount = (-TILE_SIZE, 0)
             player_sprite.pos = (player_sprite.pos[0] - 1, player_sprite.pos[1])
