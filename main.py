@@ -5,18 +5,24 @@ from frontier_hero.sprite import Sprite, LEFT, RIGHT, UP, DOWN
 from frontier_hero.tile_cache import TileCache
 
 
-TILE_SIZE = 16
-TICKS = 50
-RESOURCES_DIR = 'resources/'
-SCREEN_WIDTH = 512
-SCREEN_HEIGHT = 256
-
-
 def can_move(pos):
     return not player_sprite.is_moving() and not level.is_blocking(int(pos[0]), int(pos[1]))
 
 
+def move_player(to_amount, to_pos, player_direction):
+    player_sprite.to_amount = to_amount
+    player_sprite.pos = to_pos
+    player_sprite.direction = player_direction
+    print(player_sprite.pos)
+
+
 if __name__ == "__main__":
+    TILE_SIZE = 16
+    TICKS = 50
+    RESOURCES_DIR = 'resources/'
+    SCREEN_WIDTH = 512
+    SCREEN_HEIGHT = 256
+
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     map_cache = TileCache(TILE_SIZE, TILE_SIZE)
@@ -56,6 +62,8 @@ if __name__ == "__main__":
                 game_over = True
         keys = pygame.key.get_pressed()
         direction = player_sprite.direction
+
+        # did player step on a warp?
         warp = level.get_warp(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
         if not player_sprite.is_moving() and warp:
             player_sprite.pos = level.get_to(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
@@ -63,25 +71,17 @@ if __name__ == "__main__":
             background = level.render()
             offset_x = (SCREEN_WIDTH / 2) - (player_sprite.pos[0] * TILE_SIZE)
             offset_y = (SCREEN_HEIGHT / 2) + 8 - (player_sprite.pos[1] * TILE_SIZE)
+
+        # evaluate movement
         if keys[pygame.K_LEFT] and can_move((player_sprite.pos[0] - 1, player_sprite.pos[1])):
-            player_sprite.to_amount = (-TILE_SIZE, 0)
-            player_sprite.pos = (player_sprite.pos[0] - 1, player_sprite.pos[1])
-            direction = player_sprite.direction
-            player_sprite.direction = LEFT
+            move_player((-TILE_SIZE, 0), (player_sprite.pos[0] - 1, player_sprite.pos[1]), LEFT)
         if keys[pygame.K_RIGHT] and can_move((player_sprite.pos[0] + 1, player_sprite.pos[1])):
-            player_sprite.to_amount = (TILE_SIZE, 0)
-            player_sprite.pos = (player_sprite.pos[0] + 1, player_sprite.pos[1])
-            direction = player_sprite.direction
-            player_sprite.direction = RIGHT
+            move_player((TILE_SIZE, 0), (player_sprite.pos[0] + 1, player_sprite.pos[1]), RIGHT)
         if keys[pygame.K_UP] and can_move((player_sprite.pos[0], player_sprite.pos[1] - 1)):
-            player_sprite.to_amount = (0, -TILE_SIZE)
-            player_sprite.pos = (player_sprite.pos[0], player_sprite.pos[1] - 1)
-            direction = player_sprite.direction
-            player_sprite.direction = UP
+            move_player((0, -TILE_SIZE), (player_sprite.pos[0], player_sprite.pos[1] - 1), UP)
         if keys[pygame.K_DOWN] and can_move((player_sprite.pos[0], player_sprite.pos[1] + 1)):
-            player_sprite.to_amount = (0, TILE_SIZE)
-            player_sprite.pos = (player_sprite.pos[0], player_sprite.pos[1] + 1)
-            direction = player_sprite.direction
-            player_sprite.direction = DOWN
+            move_player((0, TILE_SIZE), (player_sprite.pos[0], player_sprite.pos[1] + 1), DOWN)
+
+        # change animation when direction changes
         if direction != player_sprite.direction:
             next(player_sprite.animation)
