@@ -37,7 +37,7 @@ if __name__ == "__main__":
     screen.blit(background, (offset_x, offset_y))
     game_over = False
     while not game_over:
-        screen.fill((0, 0, 0))
+        # proceed player movement if any
         if player_sprite.to_amount != (0, 0):
             player_sprite.update()
             dx = 0
@@ -53,10 +53,15 @@ if __name__ == "__main__":
             player_sprite.to_amount = (player_sprite.to_amount[0] + dx, player_sprite.to_amount[1] + dy)
             offset_x = offset_x + dx
             offset_y = offset_y + dy
+
+        # redraw screen
+        screen.fill((0, 0, 0))
         screen.blit(background, (offset_x, offset_y))
         screen.blit(player_sprite.image, (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         pygame.display.update()
         clock.tick(TICKS)
+
+        # pygame events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
