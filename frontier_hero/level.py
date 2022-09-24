@@ -100,7 +100,7 @@ class Level:
                         sprite = Surface((width * self.tile_width, height * self.tile_height)).convert_alpha()
                         for y in range(height):
                             for x in range(width):
-                                sprite.blit(tiles[tile_from[0] + x][tile_to[1] + y], (x * self.tile_width, y * self.tile_height))
+                                sprite.blit(tiles[tile_from[0] + x][tile_from[1] + y], (x * self.tile_width, y * self.tile_height))
                         self.big_sprites[name] = sprite
                     image.blit(sprite, (map_x * self.tile_width, map_y * self.tile_height))
 
