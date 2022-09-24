@@ -65,8 +65,6 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
-        keys = pygame.key.get_pressed()
-        direction = player_sprite.direction
 
         # did player step on a warp?
         warp = level.get_warp(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
@@ -78,6 +76,8 @@ if __name__ == "__main__":
             offset_y = (SCREEN_HEIGHT / 2) + 8 - (player_sprite.pos[1] * TILE_SIZE)
 
         # evaluate movement
+        keys = pygame.key.get_pressed()
+        direction = player_sprite.direction
         if keys[pygame.K_LEFT] and can_move((player_sprite.pos[0] - 1, player_sprite.pos[1])):
             move_player((-TILE_SIZE, 0), (player_sprite.pos[0] - 1, player_sprite.pos[1]), LEFT)
         if keys[pygame.K_RIGHT] and can_move((player_sprite.pos[0] + 1, player_sprite.pos[1])):
