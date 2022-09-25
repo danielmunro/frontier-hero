@@ -1,6 +1,7 @@
 from configparser import ConfigParser
 from pygame import Surface
 
+from frontier_hero.sprite import PlayerSprite, DOWN, Sprite
 from frontier_hero.tile_cache import TileCache
 
 
@@ -74,11 +75,12 @@ class Level:
         tiles = self.cache[self.tileset]
         background = Surface((self.width * self.tile_width, self.height * self.tile_height)).convert_alpha()
         foreground = Surface((self.width * self.tile_width, self.height * self.tile_height)).convert_alpha()
-        self._draw(tiles, background, foreground, self.map)
-        self._draw(tiles, background, foreground, self.objects)
-        return background, foreground
+        sprites = []
+        self._draw(tiles, background, foreground, sprites, self.map)
+        self._draw(tiles, background, foreground, sprites, self.objects)
+        return background, foreground, sprites
 
-    def _draw(self, tiles, background, foreground, layer):
+    def _draw(self, tiles, background, foreground, sprites, layer):
         for map_y, line in enumerate(layer):
             for map_x, c in enumerate(line):
                 image = None
@@ -86,6 +88,7 @@ class Level:
                     tile = self.key[c]['tile'].split(',')
                     tile = int(tile[0]), int(tile[1])
                     image = tiles[tile[0]][tile[1]]
+                    self._add_to_layer(image, foreground, background, map_x, map_y)
                 elif 'tile_from' in self.key[c] and 'tile_to' in self.key[c]:
                     name = self.key[c]['name']
                     if name in self.big_images:
@@ -95,15 +98,26 @@ class Level:
                         tile_from = int(tile_from[0]), int(tile_from[1])
                         tile_to = self.key[c]['tile_to'].split(',')
                         tile_to = int(tile_to[0]), int(tile_to[1])
-                        width = 1 + tile_to[0] - tile_from[0]
-                        height = 1 + tile_to[1] - tile_from[1]
-                        image = Surface((width * self.tile_width, height * self.tile_height)).convert_alpha()
-                        for y in range(height):
-                            for x in range(width):
-                                image.blit(tiles[tile_from[0] + x][tile_from[1] + y], (x * self.tile_width, y * self.tile_height))
-                        self.big_images[name] = image
-
-                if image:
+                        try:
+                            frame_count = int(self.key[c]['frames'])
+                            print(frame_count)
+                            # frame_count = 1
+                        except KeyError:
+                            frame_count = 1
+                        width = int((tile_to[0] - tile_from[0]) / frame_count)
+                        height = tile_to[1] - tile_from[1]
+                        frames = []
+                        for frame in range(frame_count):
+                            image = Surface((width * self.tile_width, height * self.tile_height)).convert_alpha()
+                            for y in range(height):
+                                for x in range(width):
+                                    image.blit(tiles[tile_from[0] + x + (frame * width)][tile_from[1] + y],
+                                               (x * self.tile_width, y * self.tile_height))
+                            self.big_images[name] = image
+                            if frame_count > 1:
+                                frames.append(image)
+                        if frame_count > 1:
+                            sprites.append(Sprite((map_x, map_y), frames))
                     self._add_to_layer(image, foreground, background, map_x, map_y)
 
     def _add_to_layer(self, image, foreground, background, x, y):
