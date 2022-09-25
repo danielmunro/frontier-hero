@@ -28,6 +28,9 @@ class Sprite:
                 self.image = frame
                 yield
 
+    def offset_y(self):
+        return 0
+
 
 class MobSprite:
     def __init__(self, pos=(0, 0), frames=None):
@@ -41,10 +44,11 @@ class MobSprite:
         self.ticks = 0
 
     def update(self):
-        self.ticks = self.ticks + 1
-        if self.ticks > TICKS_PER_ANIM:
-            next(self.animation)
-            self.ticks = 0
+        if self.to_amount != (0, 0):
+            self.ticks = self.ticks + 1
+            if self.ticks > TICKS_PER_ANIM:
+                next(self.animation)
+                self.ticks = 0
 
     def is_moving(self):
         return self.to_amount != (0, 0)
@@ -54,3 +58,6 @@ class MobSprite:
             for frame in self.frames:
                 self.image = frame[self.direction]
                 yield
+
+    def offset_y(self):
+        return -8

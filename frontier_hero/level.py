@@ -117,6 +117,9 @@ class Level:
                         if frame_count > 1:
                             sprites.append(Sprite((map_x, map_y), frames))
                     self._add_to_layer(image, foreground, background, map_x, map_y)
+                elif 'mob' in self.key[c]:
+                    tileset = self.key[c]['tileset']
+                    sprites.append(MobSprite((map_x, map_y), TileCache(16, 24)[tileset]))
 
     def _add_to_layer(self, image, foreground, background, x, y):
         in_foreground = self.get_object(x, y).get('foreground')

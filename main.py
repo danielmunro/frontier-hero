@@ -57,11 +57,11 @@ if __name__ == "__main__":
         # redraw screen
         screen.fill((0, 0, 0))
         screen.blit(background, (offset_x, offset_y))
-        screen.blit(player_sprite.image, (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
-        screen.blit(foreground, (offset_x, offset_y))
         for sprite in sprites:
             sprite.update()
-            screen.blit(sprite.image, ((sprite.pos[0] * TILE_SIZE) + offset_x, (sprite.pos[1] * TILE_SIZE) + offset_y))
+            screen.blit(sprite.image, ((sprite.pos[0] * TILE_SIZE) + offset_x, (sprite.pos[1] * TILE_SIZE) + sprite.offset_y() + offset_y))
+        screen.blit(player_sprite.image, (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+        screen.blit(foreground, (offset_x, offset_y))
 
         pygame.display.update()
         clock.tick(TICKS)
