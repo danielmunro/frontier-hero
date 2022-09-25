@@ -1,7 +1,7 @@
 from configparser import ConfigParser
 from pygame import Surface
 
-from frontier_hero.sprite import PlayerSprite, DOWN, Sprite
+from frontier_hero.sprite import MobSprite, DOWN, Sprite
 from frontier_hero.tile_cache import TileCache
 
 

@@ -1,7 +1,7 @@
 from frontier_hero.level import Level
 import pygame
 
-from frontier_hero.sprite import PlayerSprite, LEFT, RIGHT, UP, DOWN
+from frontier_hero.sprite import MobSprite, LEFT, RIGHT, UP, DOWN
 from frontier_hero.tile_cache import TileCache
 
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + 'midgaard/town.map')
     background, foreground, sprites = level.render()
-    player_sprite = PlayerSprite((25, 10), player_sprite_cache['fireas.png'])
+    player_sprite = MobSprite((25, 10), player_sprite_cache['fireas.png'])
     offset_x = (SCREEN_WIDTH / 2) - (player_sprite.pos[0] * TILE_SIZE)
     offset_y = (SCREEN_HEIGHT / 2) + 8 - (player_sprite.pos[1] * TILE_SIZE)
     screen.blit(background, (offset_x, offset_y))

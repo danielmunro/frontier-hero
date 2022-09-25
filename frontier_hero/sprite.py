@@ -29,7 +29,7 @@ class Sprite:
                 yield
 
 
-class PlayerSprite:
+class MobSprite:
     def __init__(self, pos=(0, 0), frames=None):
         self.frames = frames
         self.animation = self.start_animation()
