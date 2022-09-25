@@ -5,6 +5,7 @@ LEFT = 1
 RIGHT = 2
 UP = 3
 TICKS_PER_ANIM = 4
+TICKS_PER_MOVE = 30
 
 
 class Sprite:
@@ -15,6 +16,7 @@ class Sprite:
         self.rect = self.image.get_rect()
         self.pos = pos
         self.ticks = 0
+        self.to_amount = (0, 0)
 
     def update(self):
         self.ticks = self.ticks + 1
@@ -44,11 +46,27 @@ class MobSprite:
         self.ticks = 0
 
     def update(self):
-        if self.to_amount != (0, 0):
-            self.ticks = self.ticks + 1
+        self.ticks = self.ticks + 1
+        if self.to_amount == (0, 0):
+            if self.ticks > TICKS_PER_MOVE:
+                self.pos = (self.pos[0], self.pos[1] + 1)
+                self.to_amount = (0, 16)
+        else:
+            dx = 0
+            dy = 0
+            if self.to_amount[0] > 0:
+                dx = -1
+            elif self.to_amount[0] < 0:
+                dx = 1
+            elif self.to_amount[1] > 0:
+                dy = -1
+            elif self.to_amount[1] < 0:
+                dy = 1
+            self.to_amount = (self.to_amount[0] + dx, self.to_amount[1] + dy)
             if self.ticks > TICKS_PER_ANIM:
                 next(self.animation)
                 self.ticks = 0
+            return dx, dy
 
     def is_moving(self):
         return self.to_amount != (0, 0)

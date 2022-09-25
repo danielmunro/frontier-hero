@@ -6,7 +6,9 @@ from frontier_hero.tile_cache import TileCache
 
 
 def can_move(pos):
-    return not player_sprite.is_moving() and not level.is_blocking(int(pos[0]), int(pos[1]))
+    return not player_sprite.is_moving() \
+           and not level.is_blocking(int(pos[0]), int(pos[1])) \
+           and not next((x for x in sprites if x.pos == pos), None)
 
 
 def move_player(to_amount, to_pos, player_direction):
@@ -39,18 +41,7 @@ if __name__ == "__main__":
     while not game_over:
         # proceed player movement if any
         if player_sprite.to_amount != (0, 0):
-            player_sprite.update()
-            dx = 0
-            dy = 0
-            if player_sprite.to_amount[0] > 0:
-                dx = -1
-            elif player_sprite.to_amount[0] < 0:
-                dx = 1
-            elif player_sprite.to_amount[1] > 0:
-                dy = -1
-            elif player_sprite.to_amount[1] < 0:
-                dy = 1
-            player_sprite.to_amount = (player_sprite.to_amount[0] + dx, player_sprite.to_amount[1] + dy)
+            dx, dy = player_sprite.update()
             offset_x = offset_x + dx
             offset_y = offset_y + dy
 
@@ -59,7 +50,10 @@ if __name__ == "__main__":
         screen.blit(background, (offset_x, offset_y))
         for sprite in sprites:
             sprite.update()
-            screen.blit(sprite.image, ((sprite.pos[0] * TILE_SIZE) + offset_x, (sprite.pos[1] * TILE_SIZE) + sprite.offset_y() + offset_y))
+            screen.blit(
+                sprite.image,
+                ((sprite.pos[0] * TILE_SIZE) + offset_x - sprite.to_amount[0],
+                 (sprite.pos[1] * TILE_SIZE) - sprite.to_amount[1] + sprite.offset_y() + offset_y))
         screen.blit(player_sprite.image, (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         screen.blit(foreground, (offset_x, offset_y))
 
