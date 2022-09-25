@@ -14,7 +14,7 @@ class Sprite:
     def __init__(self, pos=(0, 0), frames=None):
         self.frames = frames
         self.animation = self.start_animation()
-        self.image = frames[0]
+        self.image = next(self.animation)
         self.rect = self.image.get_rect()
         self.pos = pos
         self.ticks = 0
@@ -30,22 +30,16 @@ class Sprite:
         while True:
             for frame in self.frames:
                 self.image = frame
-                yield
+                yield self.image
 
     def offset_y(self):
         return 0
 
 
-class MobSprite:
+class MobSprite(Sprite):
     def __init__(self, pos=(0, 0), frames=None):
-        self.frames = frames
-        self.animation = self.start_animation()
         self.direction = DOWN
-        self.image = frames[self.direction][0]
-        self.rect = self.image.get_rect()
-        self.to_amount = (0.0, 0.0)
-        self.pos = pos
-        self.ticks = 0
+        super().__init__(pos, frames)
 
     def update(self, level):
         self.ticks = self.ticks + 1
@@ -93,7 +87,7 @@ class MobSprite:
         while True:
             for frame in self.frames:
                 self.image = frame[self.direction]
-                yield
+                yield self.image
 
     def offset_y(self):
         return -8
