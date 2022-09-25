@@ -1,3 +1,5 @@
+from random import choice
+
 SPRITE_WIDTH = 32
 SPRITE_HEIGHT = 48
 DOWN = 0
@@ -18,7 +20,7 @@ class Sprite:
         self.ticks = 0
         self.to_amount = (0, 0)
 
-    def update(self):
+    def update(self, level):
         self.ticks = self.ticks + 1
         if self.ticks > TICKS_PER_ANIM:
             next(self.animation)
@@ -45,12 +47,28 @@ class MobSprite:
         self.pos = pos
         self.ticks = 0
 
-    def update(self):
+    def update(self, level):
         self.ticks = self.ticks + 1
         if self.to_amount == (0, 0):
             if self.ticks > TICKS_PER_MOVE:
-                self.pos = (self.pos[0], self.pos[1] + 1)
-                self.to_amount = (0, 16)
+                new_pos = choice(
+                    list(
+                        filter(lambda x: not level.is_blocking(x[0], x[1]) and not level.is_object_blocking(x[0], x[1]), [
+                            (self.pos[0] - 1, self.pos[1]),
+                            (self.pos[0] + 1, self.pos[1]),
+                            (self.pos[0], self.pos[1] - 1),
+                            (self.pos[0], self.pos[1] + 1),
+                        ])))
+                self.to_amount = (-(self.pos[0] - new_pos[0]) * 16, -(self.pos[1] - new_pos[1]) * 16)
+                if self.to_amount == (-16, 0):
+                    self.direction = LEFT
+                elif self.to_amount == (16, 0):
+                    self.direction = RIGHT
+                elif self.to_amount == (0, -16):
+                    self.direction = UP
+                elif self.to_amount == (0, 16):
+                    self.direction = DOWN
+                self.pos = new_pos
         else:
             dx = 0
             dy = 0

@@ -45,7 +45,7 @@ if __name__ == "__main__":
     while not game_over:
         # proceed player movement if any
         if player_sprite.to_amount != (0, 0):
-            dx, dy = player_sprite.update()
+            dx, dy = player_sprite.update(level)
             offset_x = offset_x + dx
             offset_y = offset_y + dy
 
@@ -53,7 +53,7 @@ if __name__ == "__main__":
         screen.fill((0, 0, 0))
         screen.blit(background, (offset_x, offset_y))
         for sprite in sprites:
-            sprite.update()
+            sprite.update(level)
             screen.blit(
                 sprite.image,
                 ((sprite.pos[0] * TILE_SIZE) + offset_x - sprite.to_amount[0],
