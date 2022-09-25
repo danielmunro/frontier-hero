@@ -100,8 +100,6 @@ class Level:
                         tile_to = int(tile_to[0]), int(tile_to[1])
                         try:
                             frame_count = int(self.key[c]['frames'])
-                            print(frame_count)
-                            # frame_count = 1
                         except KeyError:
                             frame_count = 1
                         width = int((tile_to[0] - tile_from[0]) / frame_count)
