@@ -48,7 +48,7 @@ if __name__ == "__main__":
         screen.fill((0, 0, 0))
         screen.blit(background, (offset_x, offset_y))
         for sprite in sprites:
-            result = sprite.update(level)
+            result = sprite.update(level, sprites)
             if isinstance(sprite, MobSprite) and sprite.is_player_sprite and result is not None:
                 offset_x = offset_x + result[0]
                 offset_y = offset_y + result[1]

@@ -18,7 +18,7 @@ class Sprite:
         self.ticks = 0
         self.to_amount = (0, 0)
 
-    def update(self, level):
+    def update(self, level, sprites):
         self.ticks = self.ticks + 1
         if self.ticks > TICKS_PER_ANIM:
             next(self.animation)
@@ -40,18 +40,22 @@ class MobSprite(Sprite):
         self.is_player_sprite = is_player_sprite
         super().__init__(pos, frames)
 
-    def update(self, level):
+    def update(self, level, sprites):
         self.ticks = self.ticks + 1
         if self.to_amount == (0, 0):
             if not self.is_player_sprite and self.ticks > TICKS_PER_MOVE:
                 new_pos = choice(
                     list(
-                        filter(lambda x: not level.is_blocking(x[0], x[1]) and not level.is_object_blocking(x[0], x[1]), [
-                            (self.pos[0] - 1, self.pos[1]),
-                            (self.pos[0] + 1, self.pos[1]),
-                            (self.pos[0], self.pos[1] - 1),
-                            (self.pos[0], self.pos[1] + 1),
-                        ])))
+                        filter(lambda x: not level.is_blocking(x[0], x[1]) and not level.is_object_blocking(x[0], x[1]),
+                               [
+                                (self.pos[0] - 1, self.pos[1]),
+                                (self.pos[0] + 1, self.pos[1]),
+                                (self.pos[0], self.pos[1] - 1),
+                                (self.pos[0], self.pos[1] + 1),
+                            ])))
+                for sprite in sprites:
+                    if sprite.pos == new_pos:
+                        return
                 self.to_amount = (-(self.pos[0] - new_pos[0]) * 16, -(self.pos[1] - new_pos[1]) * 16)
                 if self.to_amount == (-16, 0):
                     self.direction = LEFT
