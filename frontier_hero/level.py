@@ -21,7 +21,7 @@ class Level:
                 self.key[section] = desc
         self.width = len(self.map[0])
         self.height = len(self.map)
-        self.big_sprites = {}
+        self.big_images = {}
 
     def get_tile(self, x, y):
         """Tell what's at the specified position of the map."""
@@ -88,8 +88,8 @@ class Level:
                     image = tiles[tile[0]][tile[1]]
                 elif 'tile_from' in self.key[c] and 'tile_to' in self.key[c]:
                     name = self.key[c]['name']
-                    if name in self.big_sprites:
-                        image = self.big_sprites[name]
+                    if name in self.big_images:
+                        image = self.big_images[name]
                     else:
                         tile_from = self.key[c]['tile_from'].split(',')
                         tile_from = int(tile_from[0]), int(tile_from[1])
@@ -101,7 +101,7 @@ class Level:
                         for y in range(height):
                             for x in range(width):
                                 image.blit(tiles[tile_from[0] + x][tile_from[1] + y], (x * self.tile_width, y * self.tile_height))
-                        self.big_sprites[name] = image
+                        self.big_images[name] = image
 
                 if image:
                     self._add_to_layer(image, foreground, background, map_x, map_y)
