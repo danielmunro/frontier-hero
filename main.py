@@ -38,22 +38,20 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + 'midgaard/town.map')
     background, foreground, sprites = level.render()
-    player_sprite = MobSprite((25, 10), player_sprite_cache['fireas.png'])
+    player_sprite = MobSprite((25, 10), player_sprite_cache['fireas.png'], True)
+    sprites.append(player_sprite)
     offset_x, offset_y = get_offset()
     screen.blit(background, (offset_x, offset_y))
     game_over = False
     while not game_over:
-        # proceed player movement if any
-        if player_sprite.to_amount != (0, 0):
-            dx, dy = player_sprite.update(level)
-            offset_x = offset_x + dx
-            offset_y = offset_y + dy
-
         # redraw screen
         screen.fill((0, 0, 0))
         screen.blit(background, (offset_x, offset_y))
         for sprite in sprites:
-            sprite.update(level)
+            result = sprite.update(level)
+            if isinstance(sprite, MobSprite) and sprite.is_player_sprite and result is not None:
+                offset_x = offset_x + result[0]
+                offset_y = offset_y + result[1]
             screen.blit(
                 sprite.image,
                 ((sprite.pos[0] * TILE_SIZE) + offset_x - sprite.to_amount[0],
@@ -75,6 +73,7 @@ if __name__ == "__main__":
             player_sprite.pos = level.get_to(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
             level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + warp)
             background, foreground, sprites = level.render()
+            sprites.append(player_sprite)
             offset_x, offset_y = get_offset()
 
         # evaluate movement

@@ -1,7 +1,5 @@
 from random import choice
 
-SPRITE_WIDTH = 32
-SPRITE_HEIGHT = 48
 DOWN = 0
 LEFT = 1
 RIGHT = 2
@@ -37,14 +35,15 @@ class Sprite:
 
 
 class MobSprite(Sprite):
-    def __init__(self, pos=(0, 0), frames=None):
+    def __init__(self, pos=(0, 0), frames=None, is_player_sprite=False):
         self.direction = DOWN
+        self.is_player_sprite = is_player_sprite
         super().__init__(pos, frames)
 
     def update(self, level):
         self.ticks = self.ticks + 1
         if self.to_amount == (0, 0):
-            if self.ticks > TICKS_PER_MOVE:
+            if not self.is_player_sprite and self.ticks > TICKS_PER_MOVE:
                 new_pos = choice(
                     list(
                         filter(lambda x: not level.is_blocking(x[0], x[1]) and not level.is_object_blocking(x[0], x[1]), [
