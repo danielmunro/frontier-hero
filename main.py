@@ -18,6 +18,11 @@ def move_player(to_amount, to_pos, player_direction):
     print(player_sprite.pos)
 
 
+def get_offset():
+    return (SCREEN_WIDTH / 2) - (player_sprite.pos[0] * TILE_SIZE),\
+           (SCREEN_HEIGHT / 2) + 8 - (player_sprite.pos[1] * TILE_SIZE)
+
+
 if __name__ == "__main__":
     TILE_SIZE = 16
     TICKS = 50
@@ -34,8 +39,7 @@ if __name__ == "__main__":
     level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + 'midgaard/town.map')
     background, foreground, sprites = level.render()
     player_sprite = MobSprite((25, 10), player_sprite_cache['fireas.png'])
-    offset_x = (SCREEN_WIDTH / 2) - (player_sprite.pos[0] * TILE_SIZE)
-    offset_y = (SCREEN_HEIGHT / 2) + 8 - (player_sprite.pos[1] * TILE_SIZE)
+    offset_x, offset_y = get_offset()
     screen.blit(background, (offset_x, offset_y))
     game_over = False
     while not game_over:
@@ -71,8 +75,7 @@ if __name__ == "__main__":
             player_sprite.pos = level.get_to(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
             level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + warp)
             background, foreground, sprites = level.render()
-            offset_x = (SCREEN_WIDTH / 2) - (player_sprite.pos[0] * TILE_SIZE)
-            offset_y = (SCREEN_HEIGHT / 2) + 8 - (player_sprite.pos[1] * TILE_SIZE)
+            offset_x, offset_y = get_offset()
 
         # evaluate movement
         keys = pygame.key.get_pressed()
