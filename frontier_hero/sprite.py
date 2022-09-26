@@ -7,7 +7,7 @@ LEFT = 1
 RIGHT = 2
 UP = 3
 TICKS_PER_ANIM = 4
-TICKS_PER_MOVE = 30
+TICKS_PER_MOVE = 100
 
 
 class Sprite:
@@ -40,9 +40,12 @@ class MobSprite(Sprite):
     def __init__(self, pos=(0, 0), frames=None, is_player_sprite=False):
         self.direction = DOWN
         self.is_player_sprite = is_player_sprite
+        self.engaged = False
         super().__init__(pos, frames)
 
     def update(self, level, sprites):
+        if self.engaged:
+            return
         self.ticks = self.ticks + 1
         if self.to_amount == (0, 0):
             if not self.is_player_sprite and self.ticks > TICKS_PER_MOVE:

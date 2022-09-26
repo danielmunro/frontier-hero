@@ -34,10 +34,11 @@ def get_offset():
 
 
 if __name__ == "__main__":
+    pygame.init()
+    font = pygame.font.Font('freesansbold.ttf', 24)
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     map_cache = TileCache(TILE_SIZE, TILE_SIZE)
     player_sprite_cache = TileCache(TILE_SIZE, MOB_Y_TILE_SIZE)
-
     clock = pygame.time.Clock()
     level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + 'midgaard/town.map')
     background, foreground, sprites = level.render()
@@ -46,6 +47,7 @@ if __name__ == "__main__":
     sprites.append(player_sprite)
     offset_x, offset_y = get_offset()
     screen.blit(background, (offset_x, offset_y))
+    dialog = None
     game_over = False
     while not game_over:
         # redraw screen
@@ -67,11 +69,36 @@ if __name__ == "__main__":
             offset_x = offset_x + offset_change[0]
             offset_y = offset_y + offset_change[1]
 
+        if dialog:
+            y = ((SCREEN_HEIGHT / 3) * 2) + 1
+            rect = pygame.Rect(0, y, SCREEN_WIDTH, SCREEN_HEIGHT / 3)
+            pygame.draw.rect(
+                screen,
+                (0, 0, 255),
+                rect,
+            )
+            text = font.render(dialog, True, (255, 255, 255), (0, 0, 255))
+            rect = text.get_rect()
+            rect.topleft = (0, y)
+            screen.blit(text, rect)
+
         pygame.display.update()
         clock.tick(TICKS)
 
         # pygame events
         for event in pygame.event.get():
+            if event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
+                if dialog:
+                    dialog = None
+                    for sprite in sprites:
+                        if isinstance(sprite, MobSprite):
+                            sprite.engaged = False
+                else:
+                    focus = player.get_focus_point()
+                    mob = next((s for s in sprites if isinstance(s, MobSprite) and s.pos == focus), None)
+                    if mob:
+                        dialog = "Hello world"
+                        mob.engaged = True
             if event.type == pygame.QUIT:
                 game_over = True
 
