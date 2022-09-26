@@ -49,17 +49,21 @@ if __name__ == "__main__":
         # redraw screen
         screen.fill((0, 0, 0))
         screen.blit(background, (offset_x, offset_y))
+        offset_change = (0, 0)
         for sprite in sprites:
             result = sprite.update(level, sprites)
-            if isinstance(sprite, MobSprite) and sprite.is_player_sprite and result is not None:
-                offset_x = offset_x + result[0]
-                offset_y = offset_y + result[1]
             screen.blit(
                 sprite.image,
                 ((sprite.pos[0] * TILE_SIZE) + offset_x - sprite.to_amount[0],
                  (sprite.pos[1] * TILE_SIZE) - sprite.to_amount[1] + sprite.offset_y() + offset_y))
+            if isinstance(sprite, MobSprite) and sprite.is_player_sprite and result is not None:
+                offset_change = result
         screen.blit(player_sprite.image, (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         screen.blit(foreground, (offset_x, offset_y))
+
+        if offset_change != (0, 0):
+            offset_x = offset_x + offset_change[0]
+            offset_y = offset_y + offset_change[1]
 
         pygame.display.update()
         clock.tick(TICKS)
