@@ -1,3 +1,5 @@
+from frontier_hero.constants import SCREEN_WIDTH, TILE_SIZE, SCREEN_HEIGHT, RESOURCES_DIR, TICKS, Y_OFFSET, \
+    MOB_Y_TILE_SIZE
 from frontier_hero.level import Level
 import pygame
 
@@ -20,20 +22,13 @@ def move_player(to_amount, to_pos, player_direction):
 
 def get_offset():
     return (SCREEN_WIDTH / 2) - (player_sprite.pos[0] * TILE_SIZE),\
-           (SCREEN_HEIGHT / 2) + 8 - (player_sprite.pos[1] * TILE_SIZE)
+           (SCREEN_HEIGHT / 2) - Y_OFFSET - (player_sprite.pos[1] * TILE_SIZE)
 
 
 if __name__ == "__main__":
-    TILE_SIZE = 16
-    TICKS = 50
-    RESOURCES_DIR = 'resources/'
-    SCREEN_WIDTH = 512
-    SCREEN_HEIGHT = 256
-
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
     map_cache = TileCache(TILE_SIZE, TILE_SIZE)
-    player_sprite_cache = TileCache(TILE_SIZE, 24)
+    player_sprite_cache = TileCache(TILE_SIZE, MOB_Y_TILE_SIZE)
 
     clock = pygame.time.Clock()
     level = Level(map_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + 'midgaard/town.map')

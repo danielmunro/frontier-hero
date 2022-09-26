@@ -1,5 +1,7 @@
 from random import choice
 
+from frontier_hero.constants import TILE_SIZE, Y_OFFSET
+
 DOWN = 0
 LEFT = 1
 RIGHT = 2
@@ -56,14 +58,14 @@ class MobSprite(Sprite):
                 for sprite in sprites:
                     if sprite.pos == new_pos:
                         return
-                self.to_amount = (-(self.pos[0] - new_pos[0]) * 16, -(self.pos[1] - new_pos[1]) * 16)
-                if self.to_amount == (-16, 0):
+                self.to_amount = (-(self.pos[0] - new_pos[0]) * TILE_SIZE, -(self.pos[1] - new_pos[1]) * TILE_SIZE)
+                if self.to_amount == (-TILE_SIZE, 0):
                     self.direction = LEFT
-                elif self.to_amount == (16, 0):
+                elif self.to_amount == (TILE_SIZE, 0):
                     self.direction = RIGHT
-                elif self.to_amount == (0, -16):
+                elif self.to_amount == (0, -TILE_SIZE):
                     self.direction = UP
-                elif self.to_amount == (0, 16):
+                elif self.to_amount == (0, TILE_SIZE):
                     self.direction = DOWN
                 self.pos = new_pos
             return
@@ -93,4 +95,4 @@ class MobSprite(Sprite):
                 yield self.image
 
     def offset_y(self):
-        return -8
+        return Y_OFFSET

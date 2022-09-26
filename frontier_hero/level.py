@@ -1,7 +1,8 @@
 from configparser import ConfigParser
 from pygame import Surface
 
-from frontier_hero.sprite import MobSprite, DOWN, Sprite
+from frontier_hero.constants import TILE_SIZE, MOB_Y_TILE_SIZE
+from frontier_hero.sprite import MobSprite, Sprite
 from frontier_hero.tile_cache import TileCache
 
 
@@ -119,7 +120,7 @@ class Level:
                     self._add_to_layer(image, foreground, background, map_x, map_y)
                 elif 'mob' in self.key[c]:
                     tileset = self.key[c]['tileset']
-                    sprites.append(MobSprite((map_x, map_y), TileCache(16, 24)[tileset]))
+                    sprites.append(MobSprite((map_x, map_y), TileCache(TILE_SIZE, MOB_Y_TILE_SIZE)[tileset]))
 
     def _add_to_layer(self, image, foreground, background, x, y):
         in_foreground = self.get_object(x, y).get('foreground')
