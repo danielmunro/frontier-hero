@@ -37,10 +37,13 @@ class Sprite:
 
 
 class MobSprite(Sprite):
-    def __init__(self, pos=(0, 0), frames=None, is_player_sprite=False):
+    def __init__(self, pos=(0, 0), frames=None, is_player_sprite=False, messages=None):
+        if messages is None:
+            messages = []
         self.direction = DOWN
         self.is_player_sprite = is_player_sprite
         self.engaged = False
+        self.messages = messages
         super().__init__(pos, frames)
 
     def update(self, level, sprites):

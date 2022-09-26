@@ -18,9 +18,8 @@ class Level:
         self.map = parser.get("level", "map").split("\n")
         self.objects = parser.get("level", "objects").split("\n")
         for section in parser.sections():
-            if len(section) == 1:
-                desc = dict(parser.items(section))
-                self.key[section] = desc
+            desc = dict(parser.items(section))
+            self.key[section] = desc
         self.width = len(self.map[0])
         self.height = len(self.map)
         self.big_images = {}
@@ -120,7 +119,7 @@ class Level:
                     self._add_to_layer(image, foreground, background, map_x, map_y)
                 elif 'mob' in self.key[c]:
                     tileset = self.key[c]['tileset']
-                    sprites.append(MobSprite((map_x, map_y), TileCache(TILE_SIZE, MOB_Y_TILE_SIZE)[tileset]))
+                    sprites.append(MobSprite(pos=(map_x, map_y), frames=TileCache(TILE_SIZE, MOB_Y_TILE_SIZE)[tileset]))
 
     def _add_to_layer(self, image, foreground, background, x, y):
         in_foreground = self.get_object(x, y).get('foreground')

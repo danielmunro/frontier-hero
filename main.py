@@ -97,7 +97,7 @@ if __name__ == "__main__":
                     focus = player.get_focus_point()
                     mob = next((s for s in sprites if isinstance(s, MobSprite) and s.pos == focus), None)
                     if mob:
-                        dialog = "Hello world"
+                        dialog = "hello world"
                         mob.engaged = True
             if event.type == pygame.QUIT:
                 game_over = True
