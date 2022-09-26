@@ -106,6 +106,5 @@ if __name__ == "__main__":
                 DOWN,
             )
 
-        # change animation when direction changes
         if direction != player_sprite.direction:
             next(player_sprite.animation)
