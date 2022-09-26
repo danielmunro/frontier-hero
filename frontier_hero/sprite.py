@@ -66,22 +66,22 @@ class MobSprite(Sprite):
                 elif self.to_amount == (0, 16):
                     self.direction = DOWN
                 self.pos = new_pos
-        else:
-            dx = 0
-            dy = 0
-            if self.to_amount[0] > 0:
-                dx = -1
-            elif self.to_amount[0] < 0:
-                dx = 1
-            elif self.to_amount[1] > 0:
-                dy = -1
-            elif self.to_amount[1] < 0:
-                dy = 1
-            self.to_amount = (self.to_amount[0] + dx, self.to_amount[1] + dy)
-            if self.ticks > TICKS_PER_ANIM:
-                next(self.animation)
-                self.ticks = 0
-            return dx, dy
+            return
+        dx = 0
+        dy = 0
+        if self.to_amount[0] > 0:
+            dx = -1
+        elif self.to_amount[0] < 0:
+            dx = 1
+        elif self.to_amount[1] > 0:
+            dy = -1
+        elif self.to_amount[1] < 0:
+            dy = 1
+        self.to_amount = (self.to_amount[0] + dx, self.to_amount[1] + dy)
+        if self.ticks > TICKS_PER_ANIM:
+            next(self.animation)
+            self.ticks = 0
+        return dx, dy
 
     def is_moving(self):
         return self.to_amount != (0, 0)
