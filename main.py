@@ -7,6 +7,13 @@ from frontier_hero.sprite import MobSprite, LEFT, RIGHT, UP, DOWN
 from frontier_hero.tile_cache import TileCache
 
 
+def evaluate_direction_key(new_pos, move_amount, direction_moving):
+    if can_move(new_pos):
+        move_player(move_amount, new_pos, direction_moving)
+    elif not player_sprite.is_moving():
+        player_sprite.direction = direction_moving
+
+
 def can_move(pos):
     return not player_sprite.is_moving() \
            and not level.is_blocking(int(pos[0]), int(pos[1])) \
@@ -74,14 +81,30 @@ if __name__ == "__main__":
         # evaluate movement
         keys = pygame.key.get_pressed()
         direction = player_sprite.direction
-        if keys[pygame.K_LEFT] and can_move((player_sprite.pos[0] - 1, player_sprite.pos[1])):
-            move_player((-TILE_SIZE, 0), (player_sprite.pos[0] - 1, player_sprite.pos[1]), LEFT)
-        if keys[pygame.K_RIGHT] and can_move((player_sprite.pos[0] + 1, player_sprite.pos[1])):
-            move_player((TILE_SIZE, 0), (player_sprite.pos[0] + 1, player_sprite.pos[1]), RIGHT)
-        if keys[pygame.K_UP] and can_move((player_sprite.pos[0], player_sprite.pos[1] - 1)):
-            move_player((0, -TILE_SIZE), (player_sprite.pos[0], player_sprite.pos[1] - 1), UP)
-        if keys[pygame.K_DOWN] and can_move((player_sprite.pos[0], player_sprite.pos[1] + 1)):
-            move_player((0, TILE_SIZE), (player_sprite.pos[0], player_sprite.pos[1] + 1), DOWN)
+        if keys[pygame.K_LEFT]:
+            evaluate_direction_key(
+                (player_sprite.pos[0] - 1, player_sprite.pos[1]),
+                (-TILE_SIZE, 0),
+                LEFT,
+            )
+        elif keys[pygame.K_RIGHT]:
+            evaluate_direction_key(
+                (player_sprite.pos[0] + 1, player_sprite.pos[1]),
+                (TILE_SIZE, 0),
+                RIGHT,
+            )
+        elif keys[pygame.K_UP]:
+            evaluate_direction_key(
+                (player_sprite.pos[0], player_sprite.pos[1] - 1),
+                (0, -TILE_SIZE),
+                UP,
+            )
+        elif keys[pygame.K_DOWN]:
+            evaluate_direction_key(
+                (player_sprite.pos[0], player_sprite.pos[1] + 1),
+                (0, TILE_SIZE),
+                DOWN,
+            )
 
         # change animation when direction changes
         if direction != player_sprite.direction:
