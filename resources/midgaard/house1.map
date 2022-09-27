@@ -10,7 +10,7 @@ map = ..;;;;;.;.
 objects = ,,,,,,,,,,
           ,,,,,,,,,,
           ,,,,,,,,,,
-          ,,,,,,,,,,
+          ,,c,,,,,,,
           ,,,,,$,,,,
           ,,,,,,,,,,
 
@@ -58,3 +58,8 @@ block = true
 name = horizontal_wall
 tile = 0, 0
 block = true
+
+[c]
+name = chest
+block = true
+chest = true

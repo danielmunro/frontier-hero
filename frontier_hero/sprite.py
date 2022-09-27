@@ -36,6 +36,18 @@ class Sprite:
         return 0
 
 
+class ChestSprite(Sprite):
+    def __init__(self, pos=(0, 0), frames=None):
+        self.closed = True
+        super().__init__(pos, frames)
+
+    def update(self, level, sprites):
+        if self.closed:
+            self.image = self.frames[0]
+        else:
+            self.image = self.frames[1]
+
+
 class MobSprite(Sprite):
     def __init__(self, pos=(0, 0), frames=None, is_player_sprite=False, messages=None):
         if messages is None:

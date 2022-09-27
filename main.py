@@ -4,7 +4,7 @@ from frontier_hero.level import Level
 import pygame
 
 from frontier_hero.player import Player
-from frontier_hero.sprite import MobSprite, LEFT, RIGHT, UP, DOWN
+from frontier_hero.sprite import MobSprite, LEFT, RIGHT, UP, DOWN, ChestSprite
 from frontier_hero.tile_cache import TileCache
 
 
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     level = Level(tile_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + 'midgaard/town.map')
     background, foreground, sprites = level.render()
-    player_sprite = MobSprite((25, 10), player_sprite_cache['fireas.png'], True)
+    player_sprite = MobSprite((19, 8), player_sprite_cache['fireas.png'], True)
     player = Player(player_sprite)
     sprites.append(player_sprite)
     offset_x, offset_y = get_offset()
@@ -99,6 +99,9 @@ if __name__ == "__main__":
                     if mob:
                         dialog = "hello world"
                         mob.engaged = True
+                    chest = next((s for s in sprites if isinstance(s, ChestSprite) and s.pos == focus), None)
+                    if chest and chest.closed is True:
+                        chest.closed = False
             if event.type == pygame.QUIT:
                 game_over = True
 
