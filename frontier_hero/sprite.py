@@ -37,8 +37,9 @@ class Sprite:
 
 
 class ChestSprite(Sprite):
-    def __init__(self, pos=(0, 0), frames=None):
+    def __init__(self, pos=(0, 0), frames=None, item=None):
         self.image = frames[0]
+        self.item = item
         super().__init__(pos, frames)
 
     def update(self, player, level, sprites):

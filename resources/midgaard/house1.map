@@ -63,3 +63,4 @@ block = true
 name = chest
 block = true
 chest = true
+item = 1

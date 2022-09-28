@@ -1,5 +1,6 @@
 from frontier_hero.constants import SCREEN_WIDTH, TILE_SIZE, SCREEN_HEIGHT, RESOURCES_DIR, TICKS, Y_OFFSET, \
     MOB_Y_TILE_SIZE
+from frontier_hero.item import item_factory
 from frontier_hero.level import Level
 import pygame
 
@@ -102,6 +103,9 @@ if __name__ == "__main__":
                     chest = next((s for s in sprites if isinstance(s, ChestSprite) and s.pos == focus), None)
                     if chest and player.is_chest_closed(level.filename, chest.pos):
                         player.open_chest(level.filename, chest.pos)
+                        item = item_factory(chest.item)
+                        player.items.append(item)
+                        dialog = "you gained " + item.name
             if event.type == pygame.QUIT:
                 game_over = True
 

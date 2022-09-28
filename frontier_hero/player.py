@@ -5,6 +5,7 @@ class Player:
     def __init__(self, sprite):
         self.state = {}
         self.chests = {}
+        self.items = []
         self.sprite = sprite
 
     def get_focus_point(self):

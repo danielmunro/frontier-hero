@@ -123,7 +123,7 @@ class Level:
                     sprites.append(MobSprite(pos=(map_x, map_y), frames=TileCache(TILE_SIZE, MOB_Y_TILE_SIZE)[tileset]))
                 elif 'chest' in self.key[c]:
                     objects = self.cache['objects.png']
-                    sprites.append(ChestSprite(pos=(map_x, map_y), frames=[objects[0][0], objects[1][0]]))
+                    sprites.append(ChestSprite(pos=(map_x, map_y), frames=[objects[0][0], objects[1][0]], item=int(self.key[c]['item'])))
 
     def _add_to_layer(self, image, foreground, background, x, y):
         in_foreground = self.get_object(x, y).get('foreground')
