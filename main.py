@@ -55,7 +55,7 @@ if __name__ == "__main__":
         screen.blit(background, (offset_x, offset_y))
         offset_change = (0, 0)
         for sprite in sprites:
-            result = sprite.update(level, sprites)
+            result = sprite.update(player, level, sprites)
             screen.blit(
                 sprite.image,
                 ((sprite.pos[0] * TILE_SIZE) + offset_x - sprite.to_amount[0],
@@ -100,8 +100,8 @@ if __name__ == "__main__":
                         dialog = "hello world"
                         mob.engaged = True
                     chest = next((s for s in sprites if isinstance(s, ChestSprite) and s.pos == focus), None)
-                    if chest and chest.closed is True:
-                        chest.closed = False
+                    if chest and player.is_chest_closed(level.filename, chest.pos):
+                        player.open_chest(level.filename, chest.pos)
             if event.type == pygame.QUIT:
                 game_over = True
 

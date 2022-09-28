@@ -12,6 +12,7 @@ class Level:
         self.tile_width = tile_width
         self.tile_height = tile_height
         self.key = {}
+        self.filename = filename
         parser = ConfigParser()
         parser.read(filename)
         self.tileset = parser.get("level", "tileset")

@@ -20,7 +20,7 @@ class Sprite:
         self.ticks = 0
         self.to_amount = (0, 0)
 
-    def update(self, level, sprites):
+    def update(self, player, level, sprites):
         self.ticks = self.ticks + 1
         if self.ticks > TICKS_PER_ANIM:
             next(self.animation)
@@ -38,11 +38,11 @@ class Sprite:
 
 class ChestSprite(Sprite):
     def __init__(self, pos=(0, 0), frames=None):
-        self.closed = True
+        self.image = frames[0]
         super().__init__(pos, frames)
 
-    def update(self, level, sprites):
-        if self.closed:
+    def update(self, player, level, sprites):
+        if player.is_chest_closed(level.filename, self.pos):
             self.image = self.frames[0]
         else:
             self.image = self.frames[1]
@@ -58,7 +58,7 @@ class MobSprite(Sprite):
         self.messages = messages
         super().__init__(pos, frames)
 
-    def update(self, level, sprites):
+    def update(self, player, level, sprites):
         if self.engaged:
             return
         self.ticks = self.ticks + 1
