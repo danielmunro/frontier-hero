@@ -1,3 +1,4 @@
+import sys
 from configparser import ConfigParser
 from pygame import Surface
 
@@ -18,9 +19,12 @@ class Level:
         self.tileset = parser.get("level", "tileset")
         self.map = parser.get("level", "map").split("\n")
         self.objects = parser.get("level", "objects").split("\n")
+        self.replacements = {}
         for section in parser.sections():
             desc = dict(parser.items(section))
             self.key[section] = desc
+            if "replace" in desc:
+                self.replacements[desc["replace"]] = section
         self.width = len(self.map[0])
         self.height = len(self.map)
         self.big_images = {}
@@ -78,8 +82,48 @@ class Level:
         foreground = Surface((self.width * self.tile_width, self.height * self.tile_height)).convert_alpha()
         sprites = []
         self._draw(tiles, background, foreground, sprites, self.map)
+        for map_y, line in enumerate(self.map):
+            for map_x, c in enumerate(line):
+                if c in self.replacements:
+                    to = self.key[self.replacements[c]]
+                    try:
+                        image = None
+                        if self.map[map_y - 1][map_x] == self.replacements[c] and self.map[map_y - 1][map_x + 1] == self.replacements[c] and self.map[map_y][map_x + 1] == self.replacements[c]:
+                            image = self.get_image(to['tlcorner'], tiles)
+                        elif self.map[map_y - 1][map_x] == self.replacements[c] and self.map[map_y - 1][map_x - 1] == self.replacements[c] and self.map[map_y][map_x - 1] == self.replacements[c]:
+                            image = self.get_image(to['trcorner'], tiles)
+                        elif self.map[map_y + 1][map_x] == self.replacements[c] and self.map[map_y + 1][map_x + 1] == self.replacements[c] and self.map[map_y][map_x + 1] == self.replacements[c]:
+                            image = self.get_image(to['blcorner'], tiles)
+                        elif self.map[map_y + 1][map_x] == self.replacements[c] and self.map[map_y + 1][map_x - 1] == self.replacements[c] and self.map[map_y][map_x - 1] == self.replacements[c]:
+                            image = self.get_image(to['brcorner'], tiles)
+                        elif self.map[map_y + 1][map_x - 1] == self.replacements[c] and self.map[map_y + 1][map_x] == c and self.map[map_y][map_x - 1] == c:
+                            image = self.get_image(to['tr'], tiles)
+                        elif self.map[map_y - 1][map_x + 1] == self.replacements[c] and self.map[map_y - 1][map_x] == c and self.map[map_y][map_x + 1] == c:
+                            image = self.get_image(to['bl'], tiles)
+                        elif self.map[map_y + 1][map_x + 1] == self.replacements[c] and self.map[map_y + 1][map_x] == c and self.map[map_y][map_x + 1] == c:
+                            image = self.get_image(to['tl'], tiles)
+                        elif self.map[map_y - 1][map_x - 1] == self.replacements[c] and self.map[map_y - 1][map_x] == c and self.map[map_y][map_x - 1] == c:
+                            image = self.get_image(to['br'], tiles)
+                        elif self.map[map_y + 1][map_x] == self.replacements[c]:
+                            image = self.get_image(to['t'], tiles)
+                        elif self.map[map_y - 1][map_x] == self.replacements[c]:
+                            image = self.get_image(to['b'], tiles)
+                        elif self.map[map_y][map_x - 1] == self.replacements[c]:
+                            image = self.get_image(to['r'], tiles)
+                        elif self.map[map_y][map_x + 1] == self.replacements[c]:
+                            image = self.get_image(to['l'], tiles)
+                        if image:
+                            self._add_to_layer(image, foreground, background, map_x, map_y)
+                    except IndexError:
+                        pass
         self._draw(tiles, background, foreground, sprites, self.objects)
         return background, foreground, sprites
+
+    @staticmethod
+    def get_image(to, tiles):
+        t = to.split(',')
+        t = int(t[0]), int(t[1])
+        return tiles[t[0]][t[1]]
 
     def _draw(self, tiles, background, foreground, sprites, layer):
         for map_y, line in enumerate(layer):
