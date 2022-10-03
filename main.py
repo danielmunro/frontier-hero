@@ -43,7 +43,7 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     level = Level(tile_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + 'midgaard/town.map')
     background, foreground, sprites = level.render()
-    player_sprite = MobSprite((19, 8), player_sprite_cache['fireas.png'], True)
+    player_sprite = MobSprite((31, 18), player_sprite_cache['fireas.png'], True)
     player = Player(player_sprite)
     sprites.append(player_sprite)
     offset_x, offset_y = get_offset()
