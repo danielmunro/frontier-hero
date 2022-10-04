@@ -100,6 +100,10 @@ class Level:
                             image = self.get_image(to['br'], tiles)
                         elif self.objects[map_y + 1][map_x] == c and self.objects[map_y][map_x - 1] == c:
                             image = self.get_image(to['tr'], tiles)
+                        elif self.objects[map_y + 1][map_x] == c and self.objects[map_y - 1][map_x] != c:
+                            image = self.get_image(to['t'], tiles)
+                        elif self.objects[map_y - 1][map_x] == c and self.objects[map_y + 1][map_x] != c:
+                            image = self.get_image(to['b'], tiles)
                         elif self.objects[map_y][map_x + 1] == c and self.objects[map_y][map_x - 1] != c:
                             image = self.get_image(to['r'], tiles)
                         elif self.objects[map_y][map_x - 1] == c and self.objects[map_y][map_x + 1] != c:
