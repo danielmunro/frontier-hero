@@ -19,12 +19,15 @@ class Level:
         self.tileset = parser.get("level", "tileset")
         self.map = parser.get("level", "map").split("\n")
         self.objects = parser.get("level", "objects").split("\n")
-        self.replacements = {}
+        self.nice_edge = {}
+        self.line = {}
         for section in parser.sections():
             desc = dict(parser.items(section))
             self.key[section] = desc
-            if "replace" in desc:
-                self.replacements[desc["replace"]] = section
+            if "nice_edge" in desc:
+                self.nice_edge[desc["nice_edge"]] = section
+            elif "line" in desc:
+                self.line[section] = True
         self.width = len(self.map[0])
         self.height = len(self.map)
         self.big_images = {}
@@ -82,7 +85,33 @@ class Level:
         foreground = Surface((self.width * self.tile_width, self.height * self.tile_height)).convert_alpha()
         sprites = []
         self._draw(tiles, background, foreground, sprites, self.map)
-        self._do_replacements(tiles, background, foreground)
+        self._do_nice_edges(tiles, background, foreground)
+        for map_y, line in enumerate(self.objects):
+            for map_x, c in enumerate(line):
+                if c in self.line:
+                    to = self.key[c]
+                    try:
+                        image = None
+                        if self.objects[map_y + 1][map_x] == c and self.objects[map_y][map_x + 1] == c:
+                            image = self.get_image(to['tl'], tiles)
+                        elif self.objects[map_y - 1][map_x] == c and self.objects[map_y][map_x + 1] == c:
+                            image = self.get_image(to['bl'], tiles)
+                        elif self.objects[map_y][map_x - 1] == c and self.objects[map_y - 1][map_x] == c:
+                            image = self.get_image(to['br'], tiles)
+                        elif self.objects[map_y + 1][map_x] == c and self.objects[map_y][map_x - 1] == c:
+                            image = self.get_image(to['tr'], tiles)
+                        elif self.objects[map_y][map_x + 1] == c and self.objects[map_y][map_x - 1] != c:
+                            image = self.get_image(to['r'], tiles)
+                        elif self.objects[map_y][map_x - 1] == c and self.objects[map_y][map_x + 1] != c:
+                            image = self.get_image(to['l'], tiles)
+                        elif self.objects[map_y - 1][map_x] == c or self.objects[map_y + 1][map_x] == c:
+                            image = self.get_image(to['v'], tiles)
+                        elif self.objects[map_y][map_x - 1] == c or self.objects[map_y][map_x + 1] == c:
+                            image = self.get_image(to['h'], tiles)
+                        if image:
+                            self._add_to_layer(image, foreground, background, map_x, map_y)
+                    except IndexError:
+                        pass
         self._draw(tiles, background, foreground, sprites, self.objects)
         return background, foreground, sprites
 
@@ -92,36 +121,36 @@ class Level:
         t = int(t[0]), int(t[1])
         return tiles[t[0]][t[1]]
 
-    def _do_replacements(self, tiles, background, foreground):
+    def _do_nice_edges(self, tiles, background, foreground):
         for map_y, line in enumerate(self.map):
             for map_x, c in enumerate(line):
-                if c in self.replacements:
-                    to = self.key[self.replacements[c]]
+                if c in self.nice_edge:
+                    to = self.key[self.nice_edge[c]]
                     try:
                         image = None
-                        if self.map[map_y - 1][map_x] == self.replacements[c] and self.map[map_y - 1][map_x + 1] == self.replacements[c] and self.map[map_y][map_x + 1] == self.replacements[c]:
+                        if self.map[map_y - 1][map_x] == self.nice_edge[c] and self.map[map_y - 1][map_x + 1] == self.nice_edge[c] and self.map[map_y][map_x + 1] == self.nice_edge[c]:
                             image = self.get_image(to['tlcorner'], tiles)
-                        elif self.map[map_y - 1][map_x] == self.replacements[c] and self.map[map_y - 1][map_x - 1] == self.replacements[c] and self.map[map_y][map_x - 1] == self.replacements[c]:
+                        elif self.map[map_y - 1][map_x] == self.nice_edge[c] and self.map[map_y - 1][map_x - 1] == self.nice_edge[c] and self.map[map_y][map_x - 1] == self.nice_edge[c]:
                             image = self.get_image(to['trcorner'], tiles)
-                        elif self.map[map_y + 1][map_x] == self.replacements[c] and self.map[map_y + 1][map_x + 1] == self.replacements[c] and self.map[map_y][map_x + 1] == self.replacements[c]:
+                        elif self.map[map_y + 1][map_x] == self.nice_edge[c] and self.map[map_y + 1][map_x + 1] == self.nice_edge[c] and self.map[map_y][map_x + 1] == self.nice_edge[c]:
                             image = self.get_image(to['blcorner'], tiles)
-                        elif self.map[map_y + 1][map_x] == self.replacements[c] and self.map[map_y + 1][map_x - 1] == self.replacements[c] and self.map[map_y][map_x - 1] == self.replacements[c]:
+                        elif self.map[map_y + 1][map_x] == self.nice_edge[c] and self.map[map_y + 1][map_x - 1] == self.nice_edge[c] and self.map[map_y][map_x - 1] == self.nice_edge[c]:
                             image = self.get_image(to['brcorner'], tiles)
-                        elif self.map[map_y + 1][map_x - 1] == self.replacements[c] and self.map[map_y + 1][map_x] == c and self.map[map_y][map_x - 1] == c:
+                        elif self.map[map_y + 1][map_x - 1] == self.nice_edge[c] and self.map[map_y + 1][map_x] == c and self.map[map_y][map_x - 1] == c:
                             image = self.get_image(to['tr'], tiles)
-                        elif self.map[map_y - 1][map_x + 1] == self.replacements[c] and self.map[map_y - 1][map_x] == c and self.map[map_y][map_x + 1] == c:
+                        elif self.map[map_y - 1][map_x + 1] == self.nice_edge[c] and self.map[map_y - 1][map_x] == c and self.map[map_y][map_x + 1] == c:
                             image = self.get_image(to['bl'], tiles)
-                        elif self.map[map_y + 1][map_x + 1] == self.replacements[c] and self.map[map_y + 1][map_x] == c and self.map[map_y][map_x + 1] == c:
+                        elif self.map[map_y + 1][map_x + 1] == self.nice_edge[c] and self.map[map_y + 1][map_x] == c and self.map[map_y][map_x + 1] == c:
                             image = self.get_image(to['tl'], tiles)
-                        elif self.map[map_y - 1][map_x - 1] == self.replacements[c] and self.map[map_y - 1][map_x] == c and self.map[map_y][map_x - 1] == c:
+                        elif self.map[map_y - 1][map_x - 1] == self.nice_edge[c] and self.map[map_y - 1][map_x] == c and self.map[map_y][map_x - 1] == c:
                             image = self.get_image(to['br'], tiles)
-                        elif self.map[map_y + 1][map_x] == self.replacements[c]:
+                        elif self.map[map_y + 1][map_x] == self.nice_edge[c]:
                             image = self.get_image(to['t'], tiles)
-                        elif self.map[map_y - 1][map_x] == self.replacements[c]:
+                        elif self.map[map_y - 1][map_x] == self.nice_edge[c]:
                             image = self.get_image(to['b'], tiles)
-                        elif self.map[map_y][map_x - 1] == self.replacements[c]:
+                        elif self.map[map_y][map_x - 1] == self.nice_edge[c]:
                             image = self.get_image(to['r'], tiles)
-                        elif self.map[map_y][map_x + 1] == self.replacements[c]:
+                        elif self.map[map_y][map_x + 1] == self.nice_edge[c]:
                             image = self.get_image(to['l'], tiles)
                         if image:
                             self._add_to_layer(image, foreground, background, map_x, map_y)
