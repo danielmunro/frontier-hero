@@ -82,6 +82,17 @@ class Level:
         foreground = Surface((self.width * self.tile_width, self.height * self.tile_height)).convert_alpha()
         sprites = []
         self._draw(tiles, background, foreground, sprites, self.map)
+        self._do_replacements(tiles, background, foreground)
+        self._draw(tiles, background, foreground, sprites, self.objects)
+        return background, foreground, sprites
+
+    @staticmethod
+    def get_image(to, tiles):
+        t = to.split(',')
+        t = int(t[0]), int(t[1])
+        return tiles[t[0]][t[1]]
+
+    def _do_replacements(self, tiles, background, foreground):
         for map_y, line in enumerate(self.map):
             for map_x, c in enumerate(line):
                 if c in self.replacements:
@@ -116,14 +127,6 @@ class Level:
                             self._add_to_layer(image, foreground, background, map_x, map_y)
                     except IndexError:
                         pass
-        self._draw(tiles, background, foreground, sprites, self.objects)
-        return background, foreground, sprites
-
-    @staticmethod
-    def get_image(to, tiles):
-        t = to.split(',')
-        t = int(t[0]), int(t[1])
-        return tiles[t[0]][t[1]]
 
     def _draw(self, tiles, background, foreground, sprites, layer):
         for map_y, line in enumerate(layer):
