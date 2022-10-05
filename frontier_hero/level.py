@@ -86,6 +86,17 @@ class Level:
         sprites = []
         self._draw(tiles, background, foreground, sprites, self.map)
         self._do_nice_edges(tiles, background, foreground)
+        self._do_lines(tiles, background, foreground)
+        self._draw(tiles, background, foreground, sprites, self.objects)
+        return background, foreground, sprites
+
+    @staticmethod
+    def get_image(to, tiles):
+        t = to.split(',')
+        t = int(t[0]), int(t[1])
+        return tiles[t[0]][t[1]]
+
+    def _do_lines(self, tiles, background, foreground):
         for map_y, line in enumerate(self.objects):
             for map_x, c in enumerate(line):
                 if c in self.line:
@@ -116,14 +127,6 @@ class Level:
                             self._add_to_layer(image, foreground, background, map_x, map_y)
                     except IndexError:
                         pass
-        self._draw(tiles, background, foreground, sprites, self.objects)
-        return background, foreground, sprites
-
-    @staticmethod
-    def get_image(to, tiles):
-        t = to.split(',')
-        t = int(t[0]), int(t[1])
-        return tiles[t[0]][t[1]]
 
     def _do_nice_edges(self, tiles, background, foreground):
         for map_y, line in enumerate(self.map):
