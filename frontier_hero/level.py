@@ -207,6 +207,18 @@ class Level:
                 elif 'chest' in self.key[c]:
                     objects = self.cache['objects.png']
                     sprites.append(ChestSprite(pos=(map_x, map_y), frames=[objects[0][0], objects[1][0]], item=int(self.key[c]['item'])))
+                elif 'sign_weapons' in self.key[c]:
+                    tileset = self.cache['decor0.png']
+                    image = tileset[2][6]
+                    self._add_to_layer(image, foreground, background, map_x, map_y)
+                elif 'sign_items' in self.key[c]:
+                    tileset = self.cache['decor0.png']
+                    image = tileset[5][6]
+                    self._add_to_layer(image, foreground, background, map_x, map_y)
+                elif 'sign_inn' in self.key[c]:
+                    tileset = self.cache['decor0.png']
+                    image = tileset[7][6]
+                    self._add_to_layer(image, foreground, background, map_x, map_y)
 
     def _add_to_layer(self, image, foreground, background, x, y):
         in_foreground = self.get_object(x, y).get('foreground')
