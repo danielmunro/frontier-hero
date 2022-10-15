@@ -106,12 +106,18 @@ if __name__ == "__main__":
                         item = item_factory(chest.item)
                         player.items.append(item)
                         dialog = "you gained " + item.name
+            if event.type == pygame.KEYUP and event.key == pygame.K_r:
+                print("reload " + level.filename)
+                level = Level(tile_cache, TILE_SIZE, TILE_SIZE, level.filename)
+                background, foreground, sprites = level.render()
+                sprites.append(player_sprite)
             if event.type == pygame.QUIT:
                 game_over = True
 
         # did player step on a warp?
         warp = level.get_warp(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
         if not player_sprite.is_moving() and warp:
+            print("warp to " + warp)
             player_sprite.pos = level.get_to(int(player_sprite.pos[0]), int(player_sprite.pos[1]))
             level = Level(tile_cache, TILE_SIZE, TILE_SIZE, RESOURCES_DIR + warp)
             background, foreground, sprites = level.render()
